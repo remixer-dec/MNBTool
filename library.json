@@ -169,11 +169,11 @@
       "name": "Fire Damage",
       "author": "remixer-dec",
       "category": "Gameplay",
-      "version": "1.1.1",
+      "version": "1.1.2",
       "summary": "Active flames burn nearby people and horses, including fires on props, carried items and scripted bursts.",
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mbtool.fire-damage-1.1.1.zip",
-      "sha256": "3cf7f80670cb41a0959b4055c2ad2834f425e6d42206fefac84485a9e8b6a633",
-      "size": 11563
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mbtool.fire-damage-1.1.2.zip",
+      "sha256": "2a9ece9238ae86e96eb27e13e74350b128fc199bb35b5c2d924207bf95892c17",
+      "size": 12329
     },
     {
       "id": "mbtool.water",
