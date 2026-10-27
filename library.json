@@ -196,6 +196,32 @@
       "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mbtool.water-1.1.0.zip",
       "sha256": "b5e919ca3774ae537f327c4f2f2afb648aaa757fd9f8f2106836c9085e3a9f73",
       "size": 17273
+    },
+    {
+      "id": "mbtool.held-item-price-fix",
+      "verified": true,
+      "name": "Held Item Price Fix",
+      "author": "remixer-dec",
+      "category": "Input",
+      "version": "1.0.0",
+      "summary": "Fixes the wrong price shown for an item held by touch in trade and inventory.",
+      "localizations": {
+        "ru": {
+          "name": "Исправление цены удерживаемого предмета",
+          "summary": "Исправляет неверную цену предмета, удерживаемого касанием, в торговле и инвентаре."
+        },
+        "zh-rCN": {
+          "name": "手持物品价格修复",
+          "summary": "修复触屏拿起物品后，交易和物品界面中显示的错误价格。"
+        },
+        "zh-rTW": {
+          "name": "手持物品價格修復",
+          "summary": "修復觸控拿起物品後，交易和物品介面中顯示的錯誤價格。"
+        }
+      },
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mbtool.held-item-price-fix-1.0.0.zip",
+      "sha256": "437c4523e1b216a9cbaccd9a4e96073c2484777a6ad7b03ea863dcd879a815a3",
+      "size": 5078
     }
   ],
   "resourcePacks": [],
