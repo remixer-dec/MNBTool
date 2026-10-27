@@ -161,9 +161,21 @@
       "id": "mbtool.fire-damage",
       "verified": true,
       "localizations": {
+        "es": {
+          "name": "Daño por fuego",
+          "summary": "Las llamas activas queman a personas y caballos cercanos, incluyendo fuegos en objetos, artículos sostenidos y ráfagas de script."
+        },
         "ru": {
           "name": "Урон от огня",
           "summary": "Пламя обжигает людей и лошадей рядом, в том числе огонь на предметах, в руках и в скриптовых вспышках."
+        },
+        "zh-rCN": {
+          "name": "火焰伤害",
+          "summary": "周围活跃的火焰会灼伤人员和马匹，包括道具上、手持物品中的火焰及脚本触发的爆发。"
+        },
+        "zh-rTW": {
+          "name": "火焰傷害",
+          "summary": "周圍活躍的火焰會灼傷人員和馬匹，包括道具上、手持物品中的火焰及指令碼觸發的爆發。"
         }
       },
       "name": "Fire Damage",
@@ -182,15 +194,23 @@
       "author": "remixer-dec",
       "category": "Gameplay",
       "version": "1.1.0",
-      "summary": "Slower wading and sinking, softer water landings, and limited breath while the mouth is fully submerged. Single player and hosts only.",
+      "summary": "Slower wading and sinking, softer water landings, and limited breath while the mouth is fully submerged.",
       "localizations": {
         "es": {
           "name": "Física del agua y ahogamiento",
-          "summary": "Movimiento y hundimiento más lentos, caídas al agua sin daño y aire limitado con la boca totalmente sumergida. Solo en un jugador y anfitriones."
+          "summary": "Movimiento y hundimiento más lentos, caídas al agua sin daño y aire limitado con la boca totalmente sumergida."
         },
         "ru": {
           "name": "Физика воды и утопление",
-          "summary": "Замедляет движение и погружение, смягчает падения в воду и ограничивает запас воздуха при полном погружении рта. Для одиночной игры и хоста."
+          "summary": "Замедляет движение и погружение, смягчает падения в воду и ограничивает запас воздуха при полном погружении рта."
+        },
+        "zh-rCN": {
+          "name": "水物理与溺水",
+          "summary": "缓慢的涉水和下沉、柔和着陆、以及口部完全浸没时的有限呼吸。"
+        },
+        "zh-rTW": {
+          "name": "水物理與溺水",
+          "summary": "緩慢的涉水和下沉、柔和著陸、以及口部完全浸沒時的有限呼吸。"
         }
       },
       "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mnbtool.water-1.1.0.zip",
@@ -204,19 +224,23 @@
       "author": "remixer-dec",
       "category": "Input",
       "version": "1.0.0",
-      "summary": "Fixes the wrong price shown for an item held by touch in trade and inventory.",
+      "summary": "Fixes the wrong price shown for an item held by touch in trade and inventory (4.1 hotfix).",
       "localizations": {
+        "es": {
+          "name": "Corrección de precio de artículo sostenido",
+          "summary": "Corrige el precio incorrecto mostrado para un artículo sostenido por toque en comercio e inventario (4.1 hotfix)."
+        },
         "ru": {
           "name": "Исправление цены удерживаемого предмета",
-          "summary": "Исправляет неверную цену предмета, удерживаемого касанием, в торговле и инвентаре."
+          "summary": "Исправляет неверную цену предмета, удерживаемого касанием, в торговле и инвентаре (4.1 hotfix)."
         },
         "zh-rCN": {
           "name": "手持物品价格修复",
-          "summary": "修复触屏拿起物品后，交易和物品界面中显示的错误价格。"
+          "summary": "修复触屏拿起物品后，交易和物品界面中显示的错误价格（4.1 hotfix）。"
         },
         "zh-rTW": {
           "name": "手持物品價格修復",
-          "summary": "修復觸控拿起物品後，交易和物品介面中顯示的錯誤價格。"
+          "summary": "修復觸控拿起物品後，交易和物品介面中顯示的錯誤價格（4.1 hotfix）。"
         }
       },
       "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mnbtool.held-item-price-fix-1.0.0.zip",
