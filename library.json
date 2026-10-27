@@ -1,0 +1,231 @@
+{
+  "schemaVersion": 1,
+  "announcement": {
+    "en": "<p><b>M&amp;BTool 2.1 is available.</b> Update for the latest translations, engine mods and servers. <a href=\"https://t.me/rdreleases\">Get M&amp;BTool 2.1</a></p>",
+    "es": "<p><b>M&amp;BTool 2.1 ya está disponible.</b> Actualiza para acceder a las últimas traducciones, mods del motor y servidores. <a href=\"https://t.me/rdreleases\">Descargar M&amp;BTool 2.1</a></p>",
+    "ru": "<p><b>Доступен M&amp;BTool 2.1.</b> Обновитесь, чтобы пользоваться новыми переводами, модами движка и серверами. <a href=\"https://t.me/rdreleases\">Скачать M&amp;BTool 2.1</a></p>"
+  },
+  "announcements": [
+    {
+      "minLauncherVersion": "2.1",
+      "html": ""
+    }
+  ],
+  "pageAnnouncements": {
+    "modules": {
+      "en": "<p>More mod compatibility info will be added here later.</p>",
+      "ru": "<p>Здесь позже появятся дополнительные сведения о совместимости модов.</p>"
+    },
+    "about": "2026"
+  },
+  "launcher": {
+    "version": "2.1",
+    "url": "https://t.me/rdreleases"
+  },
+  "builtIns": [],
+  "localizations": [],
+  "translations": [
+    {
+      "id": "native-it",
+      "name": "Italiano",
+      "language": "it",
+      "version": "1.0",
+      "module": "Native|Calradia",
+      "summary": "By garic93, gaxleep, jabdimelborn. Gaps filled and checked by AI.",
+      "localizations": {
+        "ru": {
+          "summary": "Авторы: garic93, gaxleep, jabdimelborn. Пропуски дополнены и проверены ИИ."
+        }
+      },
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-it-1.0.zip",
+      "sha256": "6900e7fb1ce347f39ed02b0a42c46c7be25226f7dc9f9239e73861c22ffdb50b",
+      "size": 351120
+    },
+    {
+      "id": "native-pt",
+      "name": "Português (Brasil)",
+      "language": "pt",
+      "version": "1.0",
+      "module": "Native|Calradia",
+      "summary": "By gilberto-009199. Gaps filled and checked by AI.",
+      "localizations": {
+        "ru": {
+          "summary": "Автор: gilberto-009199. Пропуски дополнены и проверены ИИ."
+        }
+      },
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-pt-1.0.zip",
+      "sha256": "b13590aa263ae47a5aa816e5395aead154b16964f24bb04d360403bf21936901",
+      "size": 338396
+    },
+    {
+      "id": "native-ko",
+      "name": "한국어",
+      "language": "ko",
+      "version": "1.0",
+      "module": "Native|Calradia",
+      "summary": "By 프리쉐어, tuitenlakiett. Gaps filled and checked by AI.",
+      "localizations": {
+        "ru": {
+          "summary": "Авторы: 프리쉐어, tuitenlakiett. Пропуски дополнены и проверены ИИ."
+        }
+      },
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-ko-1.0.zip",
+      "sha256": "6548b2a639ddaf1f4d7ce84856e190f6ab6a47c1ee90557768cc93a9138cea2f",
+      "size": 1563663
+    },
+    {
+      "id": "native-vi",
+      "name": "Tiếng Việt",
+      "language": "vi",
+      "version": "1.0",
+      "module": "Native|Calradia",
+      "summary": "By codon1minh44. Gaps filled and checked by AI.",
+      "localizations": {
+        "ru": {
+          "summary": "Автор: codon1minh44. Пропуски дополнены и проверены ИИ."
+        }
+      },
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-vi-1.0.zip",
+      "sha256": "a8301f8bf42175d9eaabea61d4abfb9db19c498ddadde236aba479ce7fb88f03",
+      "size": 433213
+    },
+    {
+      "id": "native-id",
+      "name": "Bahasa Indonesia",
+      "language": "id",
+      "version": "1.0",
+      "module": "Native|Calradia",
+      "ai": true,
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-id-1.0.zip",
+      "sha256": "a28075b16aa25ccfdaaf0baa1919bb0575072aea5ff04766cf80379ebc665963",
+      "size": 314374
+    },
+    {
+      "id": "native-he",
+      "name": "עברית",
+      "language": "he",
+      "version": "1.1",
+      "module": "Native|Calradia",
+      "ai": true,
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-he-1.1.zip",
+      "sha256": "3161d13fafc15f3c25fda00ae73b35042e2449fcd1427ac475b7c8a926c08111",
+      "size": 892792
+    },
+    {
+      "id": "native-ar",
+      "name": "العربية",
+      "language": "ar",
+      "version": "1.1",
+      "module": "Native|Calradia",
+      "ai": true,
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-ar-1.1.zip",
+      "sha256": "d2ba25e961674c7bc7d2019aa52c1f02a6cc2458a6f79f14b02af7f7f9c292ea",
+      "size": 913569
+    },
+    {
+      "id": "native-fa",
+      "name": "فارسی",
+      "language": "fa",
+      "version": "1.1",
+      "module": "Native|Calradia",
+      "ai": true,
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-fa-1.1.zip",
+      "sha256": "65430a511196e1ac90caeec8917160d56d3bb3b920653cc5457def5eb1e0e76a",
+      "size": 913573
+    },
+    {
+      "id": "native-ur",
+      "name": "اردو",
+      "language": "ur",
+      "version": "1.1",
+      "module": "Native|Calradia",
+      "ai": true,
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-ur-1.1.zip",
+      "sha256": "f85eb6a068132cbf994b5b0d3ef7eb44c20a74b3e02e347916d6c0fdb39bda3f",
+      "size": 921463
+    },
+    {
+      "id": "native-th",
+      "name": "ไทย",
+      "language": "th",
+      "version": "1.0",
+      "module": "Native|Calradia",
+      "ai": true,
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-th-1.0.zip",
+      "sha256": "aebf52993f1be7a70cd0bf7a83defbb2d93ec93bd359f98782b3b55349b116e2",
+      "size": 754299
+    }
+  ],
+  "mods": [
+    {
+      "id": "mbtool.fire-damage",
+      "verified": true,
+      "localizations": {
+        "ru": {
+          "name": "Урон от огня",
+          "summary": "Пламя обжигает людей и лошадей рядом, в том числе огонь на предметах, в руках и в скриптовых вспышках."
+        }
+      },
+      "name": "Fire Damage",
+      "author": "remixer-dec",
+      "category": "Gameplay",
+      "version": "1.1.1",
+      "summary": "Active flames burn nearby people and horses, including fires on props, carried items and scripted bursts.",
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mbtool.fire-damage-1.1.1.zip",
+      "sha256": "3cf7f80670cb41a0959b4055c2ad2834f425e6d42206fefac84485a9e8b6a633",
+      "size": 11563
+    },
+    {
+      "id": "mbtool.water",
+      "verified": true,
+      "name": "Water Physics & Drowning",
+      "author": "remixer-dec",
+      "category": "Gameplay",
+      "version": "1.1.0",
+      "summary": "Slower wading and sinking, softer water landings, and limited breath while the mouth is fully submerged. Single player and hosts only.",
+      "localizations": {
+        "es": {
+          "name": "Física del agua y ahogamiento",
+          "summary": "Movimiento y hundimiento más lentos, caídas al agua sin daño y aire limitado con la boca totalmente sumergida. Solo en un jugador y anfitriones."
+        },
+        "ru": {
+          "name": "Физика воды и утопление",
+          "summary": "Замедляет движение и погружение, смягчает падения в воду и ограничивает запас воздуха при полном погружении рта. Для одиночной игры и хоста."
+        }
+      },
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mbtool.water-1.1.0.zip",
+      "sha256": "b5e919ca3774ae537f327c4f2f2afb648aaa757fd9f8f2106836c9085e3a9f73",
+      "size": 17273
+    }
+  ],
+  "resourcePacks": [],
+  "mobilePatch": {
+    "id": "mobile-patch",
+    "version": "1",
+    "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mobile-patch-1.zip",
+    "sha256": "af7c428facb26876dbacda2e78bd09d2063805dac388583a43e61174691afdfd",
+    "size": 6285895
+  },
+  "modules": [
+    {
+      "id": "Gekokujo",
+      "name": "Gekokujo",
+      "author": "Marty Olson (marty4286)",
+      "summary": "Total conversion set in Sengoku-era Japan.",
+      "description": "Gekokujo takes Warband to Sengoku-era Japan: clans fight for the country with ashigaru and samurai, bows and guns, and lords carry their historical banners.\n\nVersion 3.0 adds an opening mission, freelancing with promotion from ashigaru to samurai, agents (ninja) that open castle walls, basic battle formations for the AI, sea routes with sea battles, forts with free storage and recruits, and a detailed map from Kyushu to Ezo with Ikko temple fortresses. Weapons, armour, clothing, music and scenes are new or reworked.\n\nThe mod is in English only: in other languages, text it did not translate shows Native's translation.",
+      "support": "full",
+      "notes": "Apply the World map patch from the module's Patches window.",
+      "languages": [
+        "en"
+      ],
+      "url": "https://www.moddb.com/mods/gekokujo",
+      "localizations": {
+        "ru": {
+          "summary": "Глобальная модификация о Японии эпохи Сэнгоку."
+        }
+      },
+      "version": "3.0"
+    }
+  ],
+  "servers": []
+}

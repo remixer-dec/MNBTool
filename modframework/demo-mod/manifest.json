@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "demo.frame-rate-log",
+  "name": "Frame Rate Log (Demo)",
+  "author": "Your Name",
+  "summary": "Logs the GPU name once and the frame rate every few seconds to logcat.",
+  "category": "Diagnostics",
+  "version": "1.0.0",
+  "modAbi": 1,
+  "settings": {
+    "fields": [
+      { "key": "interval", "type": "INT", "label": "Interval (s)", "description": "Seconds between frame-rate lines.", "default": 5, "min": 1, "max": 60 }
+    ]
+  },
+  "hooks": [
+    {
+      "id": "frame-end",
+      "mechanism": "BYTEHOOK_IMPORT",
+      "behavior": "CHAIN",
+      "caller": "libMBExpMobile.so",
+      "target": "libEGL.so",
+      "symbol": "eglSwapBuffers"
+    }
+  ]
+}

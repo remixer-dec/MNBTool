@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "mbtool.water",
+  "name": "Water Physics & Drowning",
+  "author": "remixer-dec",
+  "summary": "Slower wading and sinking, softer water landings, and limited breath while the mouth is fully submerged. Single player and hosts only.",
+  "category": "Gameplay",
+  "version": "1.1.0",
+  "modAbi": 1,
+  "gameBuilds": ["default"],
+  "localizations": {
+    "es": {
+      "name": "Física del agua y ahogamiento",
+      "summary": "Movimiento y hundimiento más lentos, caídas al agua sin daño y aire limitado con la boca totalmente sumergida. Solo en un jugador y anfitriones."
+    },
+    "ru": {
+      "name": "Физика воды и утопление",
+      "summary": "Замедляет движение и погружение, смягчает падения в воду и ограничивает запас воздуха при полном погружении рта. Для одиночной игры и хоста."
+    }
+  },
+  "compatibility": { "loadBefore": ["mbtool.vibration"] },
+  "hooks": [
+    { "id": "water-blows", "mechanism": "SHADOWHOOK_UNIQUE", "behavior": "CHAIN", "target": "libMBExpMobile.so", "offset": "0x97dec" },
+    { "id": "water-clear", "mechanism": "SHADOWHOOK_UNIQUE", "behavior": "CHAIN", "target": "libMBExpMobile.so", "offset": "0xdbcb4" },
+    { "id": "water-speed", "mechanism": "SHADOWHOOK_UNIQUE", "behavior": "CHAIN", "target": "libMBExpMobile.so", "offset": "0x77158" },
+    { "id": "water-step", "mechanism": "SHADOWHOOK_UNIQUE", "behavior": "CHAIN", "target": "libMBExpMobile.so", "offset": "0x94a8c" },
+    { "id": "water-fall", "mechanism": "SHADOWHOOK_UNIQUE", "behavior": "CHAIN", "target": "libMBExpMobile.so", "offset": "0x93884" },
+    { "id": "water-mission", "mechanism": "SHADOWHOOK_UNIQUE", "behavior": "CHAIN", "target": "libMBExpMobile.so", "offset": "0xe4d28" }
+  ]
+}
