@@ -171,7 +171,7 @@
       "category": "Gameplay",
       "version": "1.1.2",
       "summary": "Active flames burn nearby people and horses, including fires on props, carried items and scripted bursts.",
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mbtool.fire-damage-1.1.2.zip",
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mnbtool.fire-damage-1.1.2.zip",
       "sha256": "2a9ece9238ae86e96eb27e13e74350b128fc199bb35b5c2d924207bf95892c17",
       "size": 12329
     },
@@ -193,7 +193,7 @@
           "summary": "Замедляет движение и погружение, смягчает падения в воду и ограничивает запас воздуха при полном погружении рта. Для одиночной игры и хоста."
         }
       },
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mbtool.water-1.1.0.zip",
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mnbtool.water-1.1.0.zip",
       "sha256": "b5e919ca3774ae537f327c4f2f2afb648aaa757fd9f8f2106836c9085e3a9f73",
       "size": 17273
     },
@@ -219,7 +219,7 @@
           "summary": "修復觸控拿起物品後，交易和物品介面中顯示的錯誤價格。"
         }
       },
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mbtool.held-item-price-fix-1.0.0.zip",
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mnbtool.held-item-price-fix-1.0.0.zip",
       "sha256": "437c4523e1b216a9cbaccd9a4e96073c2484777a6ad7b03ea863dcd879a815a3",
       "size": 5078
     }
