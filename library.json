@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "announcement": {
-    "en": "<p><b>M&amp;BTool 2.1 is available.</b> Update for the latest translations, engine mods and servers. <a href=\"https://t.me/rdreleases\">Get M&amp;BTool 2.1</a></p>",
-    "es": "<p><b>M&amp;BTool 2.1 ya está disponible.</b> Actualiza para acceder a las últimas traducciones, mods del motor y servidores. <a href=\"https://t.me/rdreleases\">Descargar M&amp;BTool 2.1</a></p>",
-    "ru": "<p><b>Доступен M&amp;BTool 2.1.</b> Обновитесь, чтобы пользоваться новыми переводами, модами движка и серверами. <a href=\"https://t.me/rdreleases\">Скачать M&amp;BTool 2.1</a></p>"
+    "en": "<p><b>M&amp;BTool 2.2 is available.</b> Update for the latest translations, engine mods and servers. <a href=\"https://t.me/rdreleases\">Get M&amp;BTool 2.2</a></p>",
+    "es": "<p><b>M&amp;BTool 2.2 ya está disponible.</b> Actualiza para acceder a las últimas traducciones, mods del motor y servidores. <a href=\"https://t.me/rdreleases\">Descargar M&amp;BTool 2.2</a></p>",
+    "ru": "<p><b>Доступен M&amp;BTool 2.2.</b> Обновитесь, чтобы пользоваться новыми переводами, модами движка и серверами. <a href=\"https://t.me/rdreleases\">Скачать M&amp;BTool 2.2</a></p>"
   },
   "announcements": [
     {
-      "minLauncherVersion": "2.1",
+      "minLauncherVersion": "2.2",
       "html": ""
     }
   ],
@@ -19,7 +19,7 @@
     "about": "2026"
   },
   "launcher": {
-    "version": "2.1",
+    "version": "2.2",
     "url": "https://t.me/rdreleases"
   },
   "builtIns": [],
@@ -38,8 +38,8 @@
         }
       },
       "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-it-1.0.zip",
-      "sha256": "6900e7fb1ce347f39ed02b0a42c46c7be25226f7dc9f9239e73861c22ffdb50b",
-      "size": 351120
+      "sha256": "57621202705ccc0f36bd16751e500eacc4eaa890c4c76433601b92f0544fcf06",
+      "size": 351127
     },
     {
       "id": "native-pt",
@@ -54,14 +54,14 @@
         }
       },
       "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-pt-1.0.zip",
-      "sha256": "b13590aa263ae47a5aa816e5395aead154b16964f24bb04d360403bf21936901",
-      "size": 338396
+      "sha256": "8f574793a073cfc946cbc714d642653f5ab074582586322ac8c2f90678a6403e",
+      "size": 338394
     },
     {
       "id": "native-ko",
       "name": "한국어",
       "language": "ko",
-      "version": "1.0",
+      "version": "1.1",
       "module": "Native|Calradia",
       "summary": "By 프리쉐어, tuitenlakiett. Gaps filled and checked by AI.",
       "localizations": {
@@ -69,15 +69,15 @@
           "summary": "Авторы: 프리쉐어, tuitenlakiett. Пропуски дополнены и проверены ИИ."
         }
       },
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-ko-1.0.zip",
-      "sha256": "6548b2a639ddaf1f4d7ce84856e190f6ab6a47c1ee90557768cc93a9138cea2f",
-      "size": 1563663
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-ko-1.1.zip",
+      "sha256": "266a7e1e721f84b92d71ffb876d1aed1692a4a37eb2b7364d913ebd23eded84c",
+      "size": 1563693
     },
     {
       "id": "native-vi",
       "name": "Tiếng Việt",
       "language": "vi",
-      "version": "1.0",
+      "version": "1.1",
       "module": "Native|Calradia",
       "summary": "By codon1minh44. Gaps filled and checked by AI.",
       "localizations": {
@@ -85,75 +85,159 @@
           "summary": "Автор: codon1minh44. Пропуски дополнены и проверены ИИ."
         }
       },
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-vi-1.0.zip",
-      "sha256": "a8301f8bf42175d9eaabea61d4abfb9db19c498ddadde236aba479ce7fb88f03",
-      "size": 433213
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-vi-1.1.zip",
+      "sha256": "623d1411979708126e5fb806ac3f69b65381482f61f11cf54d264e57c608b1be",
+      "size": 433204
     },
     {
       "id": "native-id",
       "name": "Bahasa Indonesia",
       "language": "id",
-      "version": "1.0",
+      "version": "1.1",
       "module": "Native|Calradia",
       "ai": true,
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-id-1.0.zip",
-      "sha256": "a28075b16aa25ccfdaaf0baa1919bb0575072aea5ff04766cf80379ebc665963",
-      "size": 314374
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-id-1.1.zip",
+      "sha256": "2a283647c887c9b9665a8047d09688e988964604699af51114f4f2dcc0184033",
+      "size": 314381
     },
     {
       "id": "native-he",
       "name": "עברית",
       "language": "he",
-      "version": "1.1",
+      "version": "1.2",
       "module": "Native|Calradia",
       "ai": true,
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-he-1.1.zip",
-      "sha256": "3161d13fafc15f3c25fda00ae73b35042e2449fcd1427ac475b7c8a926c08111",
-      "size": 892792
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-he-1.2.zip",
+      "sha256": "0db6d4659aeaff00a0eea549e1945b9546f8222e9266e129d39a6fb7e7e3536c",
+      "size": 898980
     },
     {
       "id": "native-ar",
       "name": "العربية",
       "language": "ar",
-      "version": "1.1",
+      "version": "1.2",
       "module": "Native|Calradia",
       "ai": true,
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-ar-1.1.zip",
-      "sha256": "d2ba25e961674c7bc7d2019aa52c1f02a6cc2458a6f79f14b02af7f7f9c292ea",
-      "size": 913569
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-ar-1.2.zip",
+      "sha256": "2b21f3fde15abb0a17bb6ccde49626e1361dbddec0c3497013644a24a671d0b4",
+      "size": 920023
     },
     {
       "id": "native-fa",
       "name": "فارسی",
       "language": "fa",
-      "version": "1.1",
+      "version": "1.3",
       "module": "Native|Calradia",
       "ai": true,
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-fa-1.1.zip",
-      "sha256": "65430a511196e1ac90caeec8917160d56d3bb3b920653cc5457def5eb1e0e76a",
-      "size": 913573
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-fa-1.3.zip",
+      "sha256": "7b5408b546039cf2c7005058bf7095fc7f45e41c6d95daf15de2ecb406960e5e",
+      "size": 920011
     },
     {
       "id": "native-ur",
       "name": "اردو",
       "language": "ur",
-      "version": "1.1",
+      "version": "1.3",
       "module": "Native|Calradia",
       "ai": true,
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-ur-1.1.zip",
-      "sha256": "f85eb6a068132cbf994b5b0d3ef7eb44c20a74b3e02e347916d6c0fdb39bda3f",
-      "size": 921463
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-ur-1.3.zip",
+      "sha256": "2f86fd2dbcfef74e10b78bef9fea181dec847d78d7f22d0dce478e43821fdc16",
+      "size": 927939
     },
     {
       "id": "native-th",
       "name": "ไทย",
       "language": "th",
-      "version": "1.0",
+      "version": "1.1",
       "module": "Native|Calradia",
       "ai": true,
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-th-1.0.zip",
-      "sha256": "aebf52993f1be7a70cd0bf7a83defbb2d93ec93bd359f98782b3b55349b116e2",
-      "size": 754299
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-th-1.1.zip",
+      "sha256": "25ececc9b3dc439378ebd75703768b091e45e29c9325396c9b37146f74f46cfd",
+      "size": 754384
+    },
+    {
+      "id": "pw-es",
+      "name": "Español",
+      "language": "es",
+      "version": "1.0",
+      "module": "Persistent World|Persistent_World|PW_4.5",
+      "ai": true,
+      "summary": "Persistent World's own text. Needs the Spanish game translation installed.",
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/pw-es-1.0.zip",
+      "sha256": "611a06dfef6d17731c403359a1feaa74b4b482fab27e362fadc29a01e4f9bebb",
+      "size": 39545
+    },
+    {
+      "id": "pw-pt",
+      "name": "Português",
+      "language": "pt",
+      "version": "1.0",
+      "module": "Persistent World|Persistent_World|PW_4.5",
+      "ai": true,
+      "summary": "Persistent World's own text. Needs the Portuguese game translation installed.",
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/pw-pt-1.0.zip",
+      "sha256": "8a554bbf60193a1a2728c5beb49bfe81dd4298025c097051a5a7353b0be1dde9",
+      "size": 39727
+    },
+    {
+      "id": "pw-id",
+      "name": "Bahasa Indonesia",
+      "language": "id",
+      "version": "1.0",
+      "module": "Persistent World|Persistent_World|PW_4.5",
+      "ai": true,
+      "summary": "Persistent World's own text. Needs the Indonesian game translation installed.",
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/pw-id-1.0.zip",
+      "sha256": "0909c742338fc965cad8675a9acaccc665b622c68a016a80f7f1d66e76aa1c8f",
+      "size": 37805
+    },
+    {
+      "id": "pw-ru",
+      "name": "Русский",
+      "language": "ru",
+      "version": "1.0",
+      "module": "Persistent World|Persistent_World|PW_4.5",
+      "ai": true,
+      "summary": "Persistent World's own text. Needs the Russian game translation installed.",
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/pw-ru-1.0.zip",
+      "sha256": "b1113a58beb55fdc6c3c9690ba47fcb1a2676d9c1751f98e4288438259c95a3c",
+      "size": 47487
+    },
+    {
+      "id": "pw-cns",
+      "name": "简体中文",
+      "language": "cns",
+      "version": "1.0",
+      "module": "Persistent World|Persistent_World|PW_4.5",
+      "ai": true,
+      "summary": "Persistent World's own text. Needs the Simplified Chinese game translation installed.",
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/pw-cns-1.0.zip",
+      "sha256": "ff153882f43354507ecded0725de56215a09d16ae63c45cdcb8f7a20be01cc07",
+      "size": 40315
+    },
+    {
+      "id": "pw-cnt",
+      "name": "繁體中文",
+      "language": "cnt",
+      "version": "1.0",
+      "module": "Persistent World|Persistent_World|PW_4.5",
+      "ai": true,
+      "summary": "Persistent World's own text. Needs the Traditional Chinese game translation installed.",
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/pw-cnt-1.0.zip",
+      "sha256": "891455f4f01e1582049ffe5695d4f922788224a84200dee65e8d86306a7a4a50",
+      "size": 40359
+    },
+    {
+      "id": "pw-ar",
+      "name": "العربية",
+      "language": "ar",
+      "version": "1.0",
+      "module": "Persistent World|Persistent_World|PW_4.5",
+      "ai": true,
+      "summary": "Persistent World's own text. Needs the Arabic game translation installed.",
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/pw-ar-1.0.zip",
+      "sha256": "d854b392de1b873213553ef8ac631d8150d3a8c8df3d45050e89e5e597f8874f",
+      "size": 42645
     }
   ],
   "mods": [
@@ -161,13 +245,73 @@
       "id": "mbtool.fire-damage",
       "verified": true,
       "localizations": {
+        "bn": {
+          "name": "আগুনের ক্ষতি",
+          "summary": "জ্বলন্ত আগুন কাছের মানুষ ও ঘোড়াকে পুড়িয়ে দেয়, এর মধ্যে বস্তুর আগুন, হাতে বহন করা জিনিসের আগুন এবং স্ক্রিপ্টে সৃষ্ট অগ্নিবিস্ফোরণও রয়েছে।"
+        },
+        "cs": {
+          "name": "Poškození ohněm",
+          "summary": "Aktivní plameny spalují blízké lidi i koně, včetně ohňů na objektech, nesených předmětů a skriptovaných výbuchů."
+        },
+        "de": {
+          "name": "Feuerschaden",
+          "summary": "Aktive Flammen verbrennen Menschen und Pferde in der Nähe, auch Feuer an Objekten, getragenen Gegenständen und skriptgesteuerte Stichflammen."
+        },
+        "el": {
+          "name": "Ζημιά από φωτιά",
+          "summary": "Οι ενεργές φλόγες καίνε κοντινούς ανθρώπους και άλογα, συμπεριλαμβανομένων των φωτιών σε αντικείμενα, σε φερόμενα αντικείμενα και σε εκρήξεις από σενάρια."
+        },
         "es": {
           "name": "Daño por fuego",
           "summary": "Las llamas activas queman a personas y caballos cercanos, incluyendo fuegos en objetos, artículos sostenidos y ráfagas de script."
         },
+        "fr": {
+          "name": "Dégâts du feu",
+          "summary": "Les flammes actives brûlent les personnes et les chevaux à proximité, y compris les feux sur les objets de décor, les objets portés et les explosions scriptées."
+        },
+        "hi": {
+          "name": "आग से नुकसान",
+          "summary": "जलती लपटें पास के लोगों और घोड़ों को झुलसा देती हैं, जिनमें वस्तुओं पर लगी आग, हाथ में ली गई चीज़ों की आग और स्क्रिप्ट से भड़की लपटें शामिल हैं।"
+        },
+        "id": {
+          "name": "Kerusakan Api",
+          "summary": "Api yang menyala membakar orang dan kuda di dekatnya, termasuk api pada objek, benda yang dibawa, dan ledakan api dari skrip."
+        },
+        "it": {
+          "name": "Danni da fuoco",
+          "summary": "Le fiamme attive bruciano persone e cavalli vicini, compresi i fuochi su oggetti di scena, oggetti trasportati ed esplosioni da script."
+        },
+        "ja": {
+          "name": "火炎ダメージ",
+          "summary": "燃えている炎が近くの人や馬を焼きます。物体の火、持ち運ぶアイテムの火、スクリプトによる炎の噴出も対象です。"
+        },
+        "ko": {
+          "name": "화염 피해",
+          "summary": "활성 화염이 근처의 사람과 말을 태웁니다. 소품의 불, 들고 있는 물건의 불, 스크립트로 발생한 불길도 포함됩니다."
+        },
+        "pl": {
+          "name": "Obrażenia od ognia",
+          "summary": "Aktywne płomienie parzą pobliskie osoby i konie, także ogień na obiektach, przenoszonych przedmiotach i skryptowe wybuchy."
+        },
+        "pt-rBR": {
+          "name": "Dano de fogo",
+          "summary": "Chamas ativas queimam pessoas e cavalos próximos, incluindo fogo em objetos do cenário, itens carregados e explosões de script."
+        },
         "ru": {
           "name": "Урон от огня",
           "summary": "Пламя обжигает людей и лошадей рядом, в том числе огонь на предметах, в руках и в скриптовых вспышках."
+        },
+        "th": {
+          "name": "ความเสียหายจากไฟ",
+          "summary": "เปลวไฟที่กำลังลุกไหม้ทำให้คนและม้าที่อยู่ใกล้ได้รับบาดเจ็บ รวมถึงไฟบนวัตถุ ไอเทมที่ถือ และไฟที่สคริปต์สั่งให้ลุกขึ้น"
+        },
+        "tr": {
+          "name": "Ateş Hasarı",
+          "summary": "Etkin alevler yakındaki insanları ve atları yakar; nesnelerdeki, taşınan eşyalardaki ve betikli alev patlamalarındaki ateşler de dahildir."
+        },
+        "vi": {
+          "name": "Sát thương lửa",
+          "summary": "Ngọn lửa đang cháy thiêu đốt người và ngựa ở gần, kể cả lửa trên vật thể, vật đang cầm và các đợt lửa do kịch bản kích hoạt."
         },
         "zh-rCN": {
           "name": "火焰伤害",
@@ -181,20 +325,15 @@
       "name": "Fire Damage",
       "author": "remixer-dec",
       "category": "Gameplay",
-      "version": "1.1.2",
+      "version": "1.1.3",
       "summary": "Active flames burn nearby people and horses, including fires on props, carried items and scripted bursts.",
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mnbtool.fire-damage-1.1.2.zip",
-      "sha256": "2a9ece9238ae86e96eb27e13e74350b128fc199bb35b5c2d924207bf95892c17",
-      "size": 12329
+      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mnbtool.fire-damage-1.1.3.zip",
+      "sha256": "2d4ec87d068299f17048661558269ee868e84a9e0589dce6de0fa690d0e043fe",
+      "size": 14850
     },
     {
       "id": "mbtool.water",
       "verified": true,
-      "name": "Water Physics & Drowning",
-      "author": "remixer-dec",
-      "category": "Gameplay",
-      "version": "1.1.0",
-      "summary": "Slower wading and sinking, softer water landings, and limited breath while the mouth is fully submerged.",
       "localizations": {
         "es": {
           "name": "Física del agua y ahogamiento",
@@ -213,23 +352,23 @@
           "summary": "緩慢的涉水和下沉、柔和著陸、以及口部完全浸沒時的有限呼吸。"
         }
       },
+      "name": "Water Physics & Drowning",
+      "author": "remixer-dec",
+      "category": "Gameplay",
+      "version": "1.1.0",
+      "summary": "Slower wading and sinking, softer water landings, and limited breath while the mouth is fully submerged. Single player and hosts only.",
       "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mnbtool.water-1.1.0.zip",
       "sha256": "b5e919ca3774ae537f327c4f2f2afb648aaa757fd9f8f2106836c9085e3a9f73",
       "size": 17273
     },
     {
       "id": "mbtool.held-item-price-fix",
+      "maxLauncherVersion": {
+        "mbtool": "2.1",
+        "game": "4.1"
+      },
       "verified": true,
-      "name": "Held Item Price Fix",
-      "author": "remixer-dec",
-      "category": "Input",
-      "version": "1.0.0",
-      "summary": "Fixes the wrong price shown for an item held by touch in trade and inventory (4.1 hotfix).",
       "localizations": {
-        "es": {
-          "name": "Corrección de precio de artículo sostenido",
-          "summary": "Corrige el precio incorrecto mostrado para un artículo sostenido por toque en comercio e inventario (4.1 hotfix)."
-        },
         "ru": {
           "name": "Исправление цены удерживаемого предмета",
           "summary": "Исправляет неверную цену предмета, удерживаемого касанием, в торговле и инвентаре (4.1 hotfix)."
@@ -241,8 +380,17 @@
         "zh-rTW": {
           "name": "手持物品價格修復",
           "summary": "修復觸控拿起物品後，交易和物品介面中顯示的錯誤價格（4.1 hotfix）。"
+        },
+        "es": {
+          "name": "Corrección de precio de artículo sostenido",
+          "summary": "Corrige el precio incorrecto mostrado para un artículo sostenido por toque en comercio e inventario (4.1 hotfix)."
         }
       },
+      "name": "Held Item Price Fix",
+      "author": "remixer-dec",
+      "category": "Input",
+      "version": "1.0.0",
+      "summary": "Fixes the wrong price shown for an item held by touch in trade and inventory.",
       "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mnbtool.held-item-price-fix-1.0.0.zip",
       "sha256": "437c4523e1b216a9cbaccd9a4e96073c2484777a6ad7b03ea863dcd879a815a3",
       "size": 5078
@@ -275,7 +423,31 @@
         }
       },
       "version": "3.0"
+    },
+    {
+      "id": "PW_4.5",
+      "name": "Persistent World",
+      "author": "Vornne",
+      "summary": "Multiplayer role-play: factions, castles, crafting and trade.",
+      "description": "Persistent World is a multiplayer-only role-playing module: players join factions, take castles, gather resources, craft and trade, and keep their money and gear on the server.\n\nIt joins servers that run the same version (4.5).",
+      "support": "partial",
+      "notes": "Basic support: joining and playing on servers works; controls for its action menus are still being refined.",
+      "languages": [
+        "en"
+      ],
+      "url": "https://www.moddb.com/mods/persistent-world-mod/downloads/pw-450",
+      "localizations": {
+        "ru": {
+          "summary": "Сетевая ролевая игра: фракции, замки, ремесло и торговля."
+        }
+      },
+      "version": "4.5"
     }
   ],
-  "servers": []
+  "servers": [
+    {
+      "name": "http://oreo922.cn",
+      "address": "http://oreo922.cn"
+    }
+  ]
 }

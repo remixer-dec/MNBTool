@@ -5,9 +5,87 @@
   "author": "remixer-dec",
   "summary": "Active flames burn nearby people and horses, including fires on props, carried items and scripted bursts.",
   "category": "Gameplay",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "modAbi": 1,
   "gameBuilds": ["default"],
+  "localizations": {
+    "bn": {
+      "name": "আগুনের ক্ষতি",
+      "summary": "জ্বলন্ত আগুন কাছের মানুষ ও ঘোড়াকে পুড়িয়ে দেয়, এর মধ্যে বস্তুর আগুন, হাতে বহন করা জিনিসের আগুন এবং স্ক্রিপ্টে সৃষ্ট অগ্নিবিস্ফোরণও রয়েছে।"
+    },
+    "cs": {
+      "name": "Poškození ohněm",
+      "summary": "Aktivní plameny spalují blízké lidi i koně, včetně ohňů na objektech, nesených předmětů a skriptovaných výbuchů."
+    },
+    "de": {
+      "name": "Feuerschaden",
+      "summary": "Aktive Flammen verbrennen Menschen und Pferde in der Nähe, auch Feuer an Objekten, getragenen Gegenständen und skriptgesteuerte Stichflammen."
+    },
+    "el": {
+      "name": "Ζημιά από φωτιά",
+      "summary": "Οι ενεργές φλόγες καίνε κοντινούς ανθρώπους και άλογα, συμπεριλαμβανομένων των φωτιών σε αντικείμενα, σε φερόμενα αντικείμενα και σε εκρήξεις από σενάρια."
+    },
+    "es": {
+      "name": "Daño por fuego",
+      "summary": "Las llamas activas queman a las personas y caballos cercanos, incluidos fuegos en objetos del escenario, objetos portados y estallidos programados por scripts."
+    },
+    "fr": {
+      "name": "Dégâts du feu",
+      "summary": "Les flammes actives brûlent les personnes et les chevaux à proximité, y compris les feux sur les objets de décor, les objets portés et les explosions scriptées."
+    },
+    "hi": {
+      "name": "आग से नुकसान",
+      "summary": "जलती लपटें पास के लोगों और घोड़ों को झुलसा देती हैं, जिनमें वस्तुओं पर लगी आग, हाथ में ली गई चीज़ों की आग और स्क्रिप्ट से भड़की लपटें शामिल हैं।"
+    },
+    "id": {
+      "name": "Kerusakan Api",
+      "summary": "Api yang menyala membakar orang dan kuda di dekatnya, termasuk api pada objek, benda yang dibawa, dan ledakan api dari skrip."
+    },
+    "it": {
+      "name": "Danni da fuoco",
+      "summary": "Le fiamme attive bruciano persone e cavalli vicini, compresi i fuochi su oggetti di scena, oggetti trasportati ed esplosioni da script."
+    },
+    "ja": {
+      "name": "火炎ダメージ",
+      "summary": "燃えている炎が近くの人や馬を焼きます。物体の火、持ち運ぶアイテムの火、スクリプトによる炎の噴出も対象です。"
+    },
+    "ko": {
+      "name": "화염 피해",
+      "summary": "활성 화염이 근처의 사람과 말을 태웁니다. 소품의 불, 들고 있는 물건의 불, 스크립트로 발생한 불길도 포함됩니다."
+    },
+    "pl": {
+      "name": "Obrażenia od ognia",
+      "summary": "Aktywne płomienie parzą pobliskie osoby i konie, także ogień na obiektach, przenoszonych przedmiotach i skryptowe wybuchy."
+    },
+    "pt-rBR": {
+      "name": "Dano de fogo",
+      "summary": "Chamas ativas queimam pessoas e cavalos próximos, incluindo fogo em objetos do cenário, itens carregados e explosões de script."
+    },
+    "ru": {
+      "name": "Урон от огня",
+      "summary": "Пламя обжигает людей и лошадей рядом, в том числе огонь на предметах, в руках и в скриптовых вспышках."
+    },
+    "th": {
+      "name": "ความเสียหายจากไฟ",
+      "summary": "เปลวไฟที่กำลังลุกไหม้ทำให้คนและม้าที่อยู่ใกล้ได้รับบาดเจ็บ รวมถึงไฟบนวัตถุ ไอเทมที่ถือ และไฟที่สคริปต์สั่งให้ลุกขึ้น"
+    },
+    "tr": {
+      "name": "Ateş Hasarı",
+      "summary": "Etkin alevler yakındaki insanları ve atları yakar; nesnelerdeki, taşınan eşyalardaki ve betikli alev patlamalarındaki ateşler de dahildir."
+    },
+    "vi": {
+      "name": "Sát thương lửa",
+      "summary": "Ngọn lửa đang cháy thiêu đốt người và ngựa ở gần, kể cả lửa trên vật thể, vật đang cầm và các đợt lửa do kịch bản kích hoạt."
+    },
+    "zh-rCN": {
+      "name": "火焰伤害",
+      "summary": "燃烧中的火焰会灼伤附近的人和马，包括道具上的火、手持物品上的火以及脚本触发的火焰爆发。"
+    },
+    "zh-rTW": {
+      "name": "火焰傷害",
+      "summary": "燃燒中的火焰會灼傷附近的人與馬，包括道具上的火、手持物品上的火，以及腳本觸發的火焰爆發。"
+    }
+  },
   "compatibility": {
     "loadBefore": ["mbtool.vibration"]
   },

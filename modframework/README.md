@@ -41,6 +41,14 @@ the request through the framework's compatible hook service, preserving chain,
 replacement and conflict policy. No callback signature list or per-mod adapter
 is required. EGL/GL import hooks and platform calls keep their native ABI.
 
+Function hooks require a callable entry proved for the declared game build.
+These include ordinary function entries and proved callback/address-taken
+entries. An internal branch target or continuation does not establish a
+function boundary, even when it has an address in the translated code map.
+Use the source-qualified patch service for supported instruction changes;
+an instruction address alone does not qualify it for a function hook.
+Source import stubs are call-only and do not become function-hook targets.
+
 The current producer supports C++17, constant library/offset targets, typed
 replacement functions and matching typed original slots. Requests may use an
 aggregate initializer or fields assigned once before the call. Scalar signatures
@@ -48,6 +56,9 @@ include signed/unsigned integers, explicit 64-bit integers, floats, doubles and
 scalar memory pointers; the ARMv7 contract supplies argument alignment and stack
 words. Use fixed-width types for game values and game storage. Platform-owned
 structures such as the argument to `clock_gettime` remain native.
+In particular, an ARMv7 game's `unsigned long*` CRC/output slot must be declared
+as `uint32_t*` in shared mod source: native ARM64 `unsigned long` occupies eight
+bytes, and casting its pointer would not preserve the game's four-byte storage.
 
 This example belongs in a mod whose manifest declares the matching game build
 and hook. Replace the example offset with the offset verified for that build:

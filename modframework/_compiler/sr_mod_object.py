@@ -72,6 +72,8 @@ def constant_integer(node, declarations, seen=None):
             raise ModObjectError('STATIC_GAME_CALL_OFFSET_REQUIRED')
         return constant_integer(declaration.get('inner',[{}])[-1],declarations,seen|{identifier})
     children=node.get('inner',())
+    if node.get('kind') == 'SubstNonTypeTemplateParmExpr' and len(children) == 2 and children[0].get('kind') == 'NonTypeTemplateParmDecl':
+        return constant_integer(children[1], declarations, seen)
     if len(children)==1 and node.get('kind') in ('ImplicitCastExpr','ParenExpr','CStyleCastExpr','CXXStaticCastExpr'):
         return constant_integer(children[0],declarations,seen)
     raise ModObjectError('STATIC_GAME_CALL_OFFSET_REQUIRED')

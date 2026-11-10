@@ -32,7 +32,7 @@ def scalar_size(value):
     return aliases[value]
 
 
-def closed_compiler_bindings(root, *, capture_slots=False):
+def closed_compiler_bindings(root, *, capture_slots=False, capture_hooks=False):
     rows = list(executable_nodes(root))
     declarations = {row['id']: row for row in rows if row.get('id')}
     parents = {}
@@ -43,6 +43,18 @@ def closed_compiler_bindings(root, *, capture_slots=False):
                  and any(n.get('kind') == 'CompoundStmt' for n in row.get('inner', ()))}
     callers = {identifier: [] for identifier in functions}
     unsafe_bindings, direct_references = set(), set()
+    unsafe_sites, induction_variables = {}, set()
+    def storage_references(expression):
+        # Taking an element's address exposes its array, not the scalar used
+        # to select the element. Side effects in that index are visited on
+        # their own by the main scan.
+        if expression.get('kind') == 'DeclRefExpr':
+            yield expression
+        children = expression.get('inner', ())
+        if expression.get('kind') == 'ArraySubscriptExpr':
+            children = children[:1]
+        for child in children:
+            yield from storage_references(child)
     for row in rows:
         children = row.get('inner', ())
         target = None
@@ -56,8 +68,12 @@ def closed_compiler_bindings(root, *, capture_slots=False):
         if row.get('kind') == 'CXXConstCastExpr':
             target = row
         if target is not None:
-            unsafe_bindings.update(n.get('referencedDecl', {}).get('id') for n in nodes(target)
-                                   if n.get('kind') == 'DeclRefExpr')
+            references = list(storage_references(target) if capture_hooks else
+                              (n for n in nodes(target) if n.get('kind') == 'DeclRefExpr'))
+            unsafe_bindings.update(n.get('referencedDecl', {}).get('id') for n in references)
+            for n in references:
+                if n.get('kind') == 'DeclRefExpr':
+                    unsafe_sites.setdefault(n.get('referencedDecl', {}).get('id'), []).append(row)
         if row.get('kind') != 'CallExpr' or not row.get('inner'): continue
         reference = direct_function(row['inner'][0])
         if reference and reference.get('id') in callers:
@@ -84,7 +100,8 @@ def closed_compiler_bindings(root, *, capture_slots=False):
                 if capture_slots and type(value.value) is int and value.value == 0:
                     return Constant(0, spelling)
                 if not value.address and not isinstance(value.value, (list, str)) and not (
-                        isinstance(value.value, dict) and 'callback' in value.value):
+                        isinstance(value.value, dict) and ('callback' in value.value or
+                            capture_hooks and any(key in value.value for key in ('hook_callback', 'hook_original')))):
                     raise ModObjectError('PATCH_BUFFER_STORAGE_ADDRESS_REQUIRED')
                 return value
             if isinstance(value.value, list):
@@ -113,12 +130,16 @@ def closed_compiler_bindings(root, *, capture_slots=False):
             reference = row.get('referencedDecl', {})
             identifier = reference.get('id')
             if identifier in environment:
-                if identifier in unsafe_bindings or parameter_owners.get(identifier) in escaped_functions:
+                if (identifier in unsafe_bindings and identifier not in induction_variables) or parameter_owners.get(identifier) in escaped_functions:
                     raise ModObjectError('IMMUTABLE_CLOSED_PATCH_BINDING_REQUIRED')
                 value = environment[identifier]
                 if value is None: raise ModObjectError('DYNAMIC_PATCH_ARGUMENT')
                 return value
             declaration = declarations.get(identifier, reference)
+            if capture_hooks and declaration.get('kind') in ('FunctionDecl', 'CXXMethodDecl'):
+                if declaration.get('kind') == 'CXXMethodDecl' and declaration.get('storageClass') != 'static':
+                    raise ModObjectError('STATIC_HOOK_CALLBACK_REQUIRED')
+                return Constant(dict(hook_callback=dict(kind='DeclRefExpr', referencedDecl=declaration)), spelling)
             if declaration.get('kind') == 'FunctionDecl':
                 return Constant(dict(callback=declaration.get('mangledName'),
                     prototype=canonical_type(declaration)), spelling)
@@ -126,6 +147,8 @@ def closed_compiler_bindings(root, *, capture_slots=False):
                 raise ModObjectError('CLOSED_PATCH_CONSTANT_REQUIRED')
             if not declaration.get('constexpr') and 'const' not in canonical_type(declaration):
                 raise ModObjectError('IMMUTABLE_PATCH_CONSTANT_REQUIRED')
+            if capture_hooks and identifier in unsafe_bindings:
+                raise ModObjectError('IMMUTABLE_CLOSED_HOOK_BINDING_REQUIRED')
             return evaluate(declaration['inner'][-1], environment, active | {identifier})
         if kind == 'InitListExpr':
             extent = re.search(r'\[(\d+)\]$', spelling)
@@ -162,6 +185,23 @@ def closed_compiler_bindings(root, *, capture_slots=False):
             while reference.get('kind') in ('ImplicitCastExpr', 'ParenExpr') and len(reference.get('inner', ())) == 1:
                 reference = reference['inner'][0]
             declaration = declarations.get(reference.get('referencedDecl', {}).get('id'), {})
+            if capture_hooks and row.get('opcode') == '&':
+                slot = declaration
+                if reference.get('kind') == 'ArraySubscriptExpr' and len(reference.get('inner', ())) == 2:
+                    base, index = reference['inner']
+                    while base.get('kind') in ('ImplicitCastExpr', 'ParenExpr') and len(base.get('inner', ())) == 1:
+                        base = base['inner'][0]
+                    declaration = declarations.get(base.get('referencedDecl', {}).get('id'), {})
+                    extent = re.fullmatch(r'void \*\[(\d+)\]', canonical_type(declaration))
+                    number = evaluate(index, environment, active).value
+                    if base.get('kind') != 'DeclRefExpr' or not extent or type(number) is not int or not 0 <= number < int(extent[1]):
+                        raise ModObjectError('BOUNDED_HOOK_ORIGINAL_ARRAY_SLOT_REQUIRED')
+                    slot = dict(declaration, id=declaration['id']+'['+str(number)+']',
+                                type={'qualType': 'void *'}, base_id=declaration['id'], slot_index=number)
+                if slot.get('kind') == 'VarDecl' and canonical_type(slot) == 'void *':
+                    argument = dict(kind='UnaryOperator', opcode='&',
+                        inner=[dict(kind='DeclRefExpr', referencedDecl=slot)])
+                    return Constant(dict(hook_original=argument), spelling, True)
             if capture_slots and row.get('opcode') == '&' and declaration.get('kind') == 'VarDecl' and \
                     '(*' in canonical_type(declaration).replace(' ', ''):
                 return Constant(dict(original=declaration.get('mangledName'),
@@ -206,7 +246,39 @@ def closed_compiler_bindings(root, *, capture_slots=False):
                         except ModObjectError: environment[parameter['id']] = None
                     environments.append(environment)
             if not environments: environments.append({})
-        for loop in reversed([n for n in ancestors(row) if n is not owner and n.get('kind') == 'CXXForRangeStmt']):
+        for loop in reversed([n for n in ancestors(row) if n is not owner and (n.get('kind') == 'CXXForRangeStmt' or
+                capture_hooks and n.get('kind') == 'ForStmt')]):
+            if loop.get('kind') == 'ForStmt':
+                parts = loop.get('inner', ())
+                if len(parts) != 5 or parts[0].get('kind') != 'DeclStmt' or parts[1].get('kind') or \
+                        len(parts[0].get('inner', ())) != 1:
+                    raise ModObjectError('CLOSED_HOOK_COUNTED_LOOP_REQUIRED')
+                variable = parts[0]['inner'][0]
+                condition, increment = parts[2:4]
+                def loop_reference(expression):
+                    while expression.get('kind') in ('ImplicitCastExpr', 'ParenExpr') and len(expression.get('inner', ())) == 1:
+                        expression = expression['inner'][0]
+                    return expression.get('kind') == 'DeclRefExpr' and expression.get('referencedDecl', {}).get('id') == variable.get('id')
+                if variable.get('kind') != 'VarDecl' or canonical_type(variable) != 'int' or len(variable.get('inner', ())) != 1 or \
+                        condition.get('kind') != 'BinaryOperator' or condition.get('opcode') != '<' or \
+                        len(condition.get('inner', ())) != 2 or not loop_reference(condition['inner'][0]) or \
+                        increment.get('kind') != 'UnaryOperator' or increment.get('opcode') != '++' or \
+                        len(increment.get('inner', ())) != 1 or not loop_reference(increment['inner'][0]) or \
+                        any(site is not increment for site in unsafe_sites.get(variable['id'], ())) or \
+                        any(n.get('kind') in ('BreakStmt', 'ContinueStmt', 'GotoStmt', 'IndirectGotoStmt', 'LambdaExpr') for n in nodes(parts[4])):
+                    raise ModObjectError('IMMUTABLE_HOOK_LOOP_INDEX_REQUIRED')
+                expanded = []
+                for environment in environments:
+                    start = evaluate(variable['inner'][0], environment).value
+                    end = evaluate(condition['inner'][1], environment).value
+                    if type(start) is not int or type(end) is not int or not -(2**31) <= start <= end < 2**31 or end-start > 256:
+                        raise ModObjectError('BOUNDED_HOOK_COUNTED_LOOP_REQUIRED')
+                    expanded.extend({**environment, variable['id']: Constant(index, 'int')} for index in range(start, end))
+                if len(expanded) > 256:
+                    raise ModObjectError('BOUNDED_HOOK_CONTEXTS_REQUIRED')
+                induction_variables.add(variable['id'])
+                environments = expanded
+                continue
             variables = [v for child in loop.get('inner', ()) if child.get('kind') == 'DeclStmt'
                          for v in child.get('inner', ()) if v.get('kind') == 'VarDecl']
             ranges = [v for v in variables if v.get('isImplicit') and '&' in canonical_type(v)
