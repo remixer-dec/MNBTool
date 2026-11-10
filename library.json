@@ -1,13 +1,17 @@
 {
   "schemaVersion": 1,
   "announcement": {
-    "en": "<p><b>M&amp;BTool 2.2 is available.</b> Update for the latest translations, engine mods and servers. <a href=\"https://t.me/rdreleases\">Get M&amp;BTool 2.2</a></p>",
-    "es": "<p><b>M&amp;BTool 2.2 ya está disponible.</b> Actualiza para acceder a las últimas traducciones, mods del motor y servidores. <a href=\"https://t.me/rdreleases\">Descargar M&amp;BTool 2.2</a></p>",
-    "ru": "<p><b>Доступен M&amp;BTool 2.2.</b> Обновитесь, чтобы пользоваться новыми переводами, модами движка и серверами. <a href=\"https://t.me/rdreleases\">Скачать M&amp;BTool 2.2</a></p>"
+    "en": "<p><b>A fresh version is available.</b> Update for the latest engine mods and servers. <a href=\"https://t.me/rdreleases\">Get the update</a></p>",
+    "es": "<p><b>Hay una nueva versión disponible.</b> Actualiza para acceder a los últimos mods del motor y servidores. <a href=\"https://t.me/rdreleases\">Descargar la actualización</a></p>",
+    "ru": "<p><b>Доступна свежая версия.</b> Обновитесь, чтобы пользоваться новыми модами движка и серверами. <a href=\"https://t.me/rdreleases\">Скачать обновление</a></p>",
+    "zh-rCN": "<p><b>新版本现已推出。</b>更新即可获取最新的引擎模组和服务器。<a href=\"https://t.me/rdreleases\">获取更新</a></p>",
+    "zh-rTW": "<p><b>新版本現已推出。</b>更新即可取得最新的引擎模組與伺服器。<a href=\"https://t.me/rdreleases\">取得更新</a></p>",
+    "id": "<p><b>Versi terbaru telah tersedia.</b> Perbarui untuk mendapatkan mod mesin dan server terbaru. <a href=\"https://t.me/rdreleases\">Dapatkan pembaruan</a></p>",
+    "ar": "<p dir=\"rtl\"><b>يتوفر إصدار جديد.</b> حدّث للحصول على أحدث تعديلات المحرك والخوادم. <a href=\"https://t.me/rdreleases\">احصل على التحديث</a></p>"
   },
   "announcements": [
     {
-      "minLauncherVersion": "2.2",
+      "minLauncherVersion": "4.2",
       "html": ""
     }
   ],
@@ -19,7 +23,7 @@
     "about": "2026"
   },
   "launcher": {
-    "version": "2.2",
+    "version": "4.2",
     "url": "https://t.me/rdreleases"
   },
   "builtIns": [],
@@ -430,7 +434,7 @@
       "author": "Vornne",
       "summary": "Multiplayer role-play: factions, castles, crafting and trade.",
       "description": "Persistent World is a multiplayer-only role-playing module: players join factions, take castles, gather resources, craft and trade, and keep their money and gear on the server.\n\nIt joins servers that run the same version (4.5).",
-      "support": "partial",
+      "support": "full",
       "notes": "Basic support: joining and playing on servers works; controls for its action menus are still being refined.",
       "languages": [
         "en"
@@ -449,5 +453,7 @@
       "name": "http://oreo922.cn",
       "address": "http://oreo922.cn"
     }
-  ]
+  ],
+  "officialSite": "",
+  "supporters": "Oreo922, Corukae, LenHa"
 }

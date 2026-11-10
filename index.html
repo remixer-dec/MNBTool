@@ -27,6 +27,7 @@
   .lead { margin: 0 0 28px; color: var(--muted); font-size: 19px; }
   .button { display: inline-block; margin: 0 10px 10px 0; padding: 10px 18px; border-radius: 3px; font-weight: 700; text-decoration: none; letter-spacing: .025em; }
   .primary { border: 1px solid #e1c06a; color: #251b0d; background: linear-gradient(#e1c477, #a87b37); box-shadow: inset 0 1px #fff5b87d, 0 2px 7px #0008; }
+  .actions { text-align: right; }
   .secondary { border: 1px solid #6d5939; color: #dac49c; background: #292219; }
   h2 { margin: 40px 0 14px; color: var(--gold-light); font-size: 22px; letter-spacing: .03em; }
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
@@ -54,24 +55,26 @@
 </header>
 <main>
   <h1>A launcher for Mount &amp; Blade: Warband on Android</h1>
-  <p class="lead">Engine mods, a mobile patch and translations for the game you already own.</p>
-  <a class="button primary" href="https://t.me/rdreleases">Download the latest release</a>
+  <div class="actions"><a class="button primary" href="https://t.me/rdreleases">Download the latest release</a></div>
 
   <h2>Features</h2>
   <div class="grid">
-    <div class="card"><h3>Bug fixes and improvements</h3><p>Fixes many of the game's bugs and issues, with performance and gameplay improvements.</p></div>
-    <div class="card"><h3>ARMv8 static recompilation</h3><p>Provides an ARMv8 variant through static recompilation, built from the ARMPORT project work.</p></div>
+    <div class="card"><h3>Bug fixes and gameplay stability</h3><p>Fixes many of the game's bugs and issues, with over 400 patches, tested manually.</p></div>
+    <div class="card"><h3>Native performance via static recompilation</h3><p>6x faster than the dynarmic translator, 10x faster than x86 emulation.</p><p>Powered by ARMPORT</p></div>
     <div class="card"><h3>Advanced language support</h3><p>Community and machine translations for the game and modules, installed from the library.</p></div>
-    <div class="card"><h3>Touch, gamepad, keyboard</h3><p>Configurable controls for touch screens, gamepads and keyboard with mouse.</p></div>
-    <div class="card"><h3>Modules</h3><p>Run PC modules, with compatibility notes in the library.</p></div>
+    <div class="card"><h3>Touch controls, gamepad, keyboard</h3><p>Configurable controls for touch screens, gamepads and keyboard with mouse.</p></div>
+    <div class="card"><h3>Modules</h3><p>Original texture formats. Instruction set upgraded to version 1.174. Bundled engine mods are supported.</p></div>
     <div class="card"><h3>Mod SDK</h3><p>Build your own native mods for ARMv7 and ARM64. The SDK is attached to each release.</p></div>
+    <div class="card"><h3>Multiplayer</h3><p>Challenge other players on LAN or Internet, join a persistent world MMO server.</p></div>
+    <div class="card"><h3>TTS/STT</h3><p>Use on-device speech models to read the text out loud, and use your voice to organize your squad.</p></div>
+    <div class="card"><h3>Exclusive features</h3><p>Smooth shadows and LODs, scene transitions, HDR screen support, tree and sky shaders.</p></div>
   </div>
 
   <h2>Languages</h2>
-  <p class="languages">The game's own: English, Čeština, Français, Deutsch, Magyar, Polski, 简体中文, 繁體中文, Español, Türkçe. Built into the launcher: Русский. From the library: Italiano, Português (Brasil), 한국어, Tiếng Việt, Bahasa Indonesia, עברית, العربية, فارسی, اردو, ไทย.</p>
+  <p class="languages">The game's own: English, Čeština, Français, Deutsch, Magyar, Polski, 简体中文, 繁體中文, Español, Türkçe. Built into the launcher: Русский. From the library: Italiano, Português, 한국어, Tiếng Việt, Bahasa Indonesia, עברית, العربية, فارسی, اردو, ไทย.</p>
 
   <div class="notice">
-    <p><b>You need the full game.</b> M&amp;BTool contains no game assets or game files. It is only a launcher with mods, a mobile patch and translations, and it works with your own legally obtained copy of Mount &amp; Blade: Warband.</p>
+    <p><b>You need the full game.</b> M&amp;BTool does not contain core game assets and data. It is only a launcher with mods, a mobile patch and translations, and it works with your own legally obtained copy of Mount &amp; Blade: Warband.</p>
     <p>This is an unofficial fan project. It is not affiliated with or endorsed by TaleWorlds Entertainment or the game's publishers. Mount &amp; Blade: Warband and all related names, logos and assets belong to their respective owners.</p>
   </div>
 </main>
