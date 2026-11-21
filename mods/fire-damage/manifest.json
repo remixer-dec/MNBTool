@@ -1,11 +1,12 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "minLauncherVersion": "4.3",
   "id": "mbtool.fire-damage",
   "name": "Fire Damage",
   "author": "remixer-dec",
   "summary": "Active flames burn nearby people and horses, including fires on props, carried items and scripted bursts.",
   "category": "Gameplay",
-  "version": "1.1.3",
+  "version": "1.1.5",
   "modAbi": 1,
   "gameBuilds": ["default"],
   "localizations": {
@@ -89,6 +90,7 @@
   "compatibility": {
     "loadBefore": ["mbtool.vibration"]
   },
+  "imports": [{ "mod": "builtin.engine-recompile", "symbols": ["mb_engine_recompile_api"] }],
   "hooks": [
     { "id": "fire-blows", "mechanism": "SHADOWHOOK_UNIQUE", "behavior": "CHAIN", "target": "libMBExpMobile.so", "offset": "0x97dec" },
     { "id": "fire-particles", "mechanism": "SHADOWHOOK_UNIQUE", "behavior": "CHAIN", "target": "libMBExpMobile.so", "offset": "0x1e6fa8" },

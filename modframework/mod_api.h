@@ -135,7 +135,22 @@ typedef struct mf_game_services_v1 {
     mf_result_v1 (*encode_pointer)(const mf_mod_context_v1*, const void* pointer, uint32_t* address);
     mf_result_v1 (*call_function)(const mf_mod_context_v1*, const char* library, uint64_t offset,
                                   const uint32_t* words, size_t word_count, uint64_t* result);
+    /* Later members: check struct_size (MF_GAME_SERVICES_HAS). */
+    /* Nonzero: a nonzero game address a is the pointer window_base + a, and a pointer p with
+     * window_base < p <= window_base + 0xffffffff is the address p - window_base, exactly what
+     * decode_pointer (size 0, access 0) and encode_pointer give, so adapters convert inline. */
+    uintptr_t window_base;
+    /* read_stack and write_stack for count consecutive words from index (index + count <= 60). */
+    mf_result_v1 (*read_stack_words)(const mf_mod_context_v1*, uint32_t index, uint32_t* values,
+                                     uint32_t count);
+    mf_result_v1 (*write_stack_words)(const mf_mod_context_v1*, uint32_t index,
+                                      const uint32_t* values, uint32_t count);
+    /* Nonzero: invoke_callback calls the callback at once on the calling thread, with nothing
+     * around it, so an adapter may call its own callback directly. */
+    uint32_t direct_callbacks;
 } mf_game_services_v1;
+#define MF_GAME_SERVICES_HAS(services, member) \
+    ((services)->struct_size >= offsetof(mf_game_services_v1, member) + sizeof((services)->member))
 
 /*
  * The game functions a package calls through resolve_game_symbol or resolve_game_address

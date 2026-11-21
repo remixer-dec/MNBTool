@@ -3,6 +3,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
+#include "engine_recompile_api.h"
 #include "mod_api.h"
 
 extern "C" void* realloc(void*, size_t);
@@ -26,7 +27,7 @@ constexpr size_t kBlow = 23356;
 constexpr size_t kHealth = 23704;
 
 using MissionTick = int32_t (*)(void*, float, int32_t);
-using ParticleTick = int32_t (*)(void*, const float*, const void*);
+using ParticleTick = void (*)(void*, const float*, const void*);
 using HandleBlows = void (*)(void*, float);
 MissionTick previous_mission_tick = nullptr;
 ParticleTick previous_particle_tick = nullptr;
@@ -36,12 +37,14 @@ const mf_mod_context_v1* context = nullptr;
 const void* mission_slot = nullptr;
 const void* network_mode = nullptr;
 const void* particle_manager = nullptr;
-const void* last_mission = nullptr;
-uint32_t last_scene = 0;
-float elapsed = 0;
-bool ticking = false;
-bool collecting = false;
-bool allocation_reported = false;
+struct MissionState {
+    const void* mission = nullptr;
+    uint32_t scene = 0;
+    float elapsed = 0;
+    bool ticking = false;
+    bool collecting = false;
+};
+MissionState mission_state;
 
 template<typename T> T& field(void* base, size_t offset) {
     return *reinterpret_cast<T*>(static_cast<uint8_t*>(base) + offset);
@@ -82,9 +85,28 @@ bool is_fire(const void* system) {
 }
 
 struct Bounds { float low[3], high[3]; };
-Bounds* fires = nullptr;
-size_t fire_count = 0;
-size_t fire_capacity = 0;
+struct FireSample {
+    Bounds* sources = nullptr;
+    size_t count = 0;
+    size_t capacity = 0;
+    bool allocation_reported = false;
+
+    void append(const Bounds& bounds) {
+        if (count == capacity) {
+            const size_t next = capacity ? capacity * 2 : 32;
+            void* allocation = next <= 65536 ? realloc(sources, next * sizeof(Bounds)) : nullptr;
+            if (!allocation) {
+                if (!allocation_reported) api->log(context, MF_LOG_WARNING, "fire source storage exhausted");
+                allocation_reported = true;
+                return;
+            }
+            sources = static_cast<Bounds*>(allocation);
+            capacity = next;
+        }
+        sources[count++] = bounds;
+    }
+};
+FireSample sample;
 
 bool include(Bounds& bounds, const void* position, const float extent[3]) {
     for (size_t axis = 0; axis < 3; ++axis) {
@@ -123,18 +145,7 @@ void collect_fire(const void* system) {
     for (size_t i = 0; i < particles; ++i) {
         if (!include(bounds, game_pointer(begin) + i * 100 + 48, particle_extent)) return;
     }
-    if (fire_count == fire_capacity) {
-        const size_t capacity = fire_capacity ? fire_capacity * 2 : 32;
-        void* allocation = capacity <= 65536 ? realloc(fires, capacity * sizeof(Bounds)) : nullptr;
-        if (allocation == nullptr) {
-            if (!allocation_reported) api->log(context, MF_LOG_WARNING, "fire source storage exhausted");
-            allocation_reported = true;
-            return;
-        }
-        fires = static_cast<Bounds*>(allocation);
-        fire_capacity = capacity;
-    }
-    fires[fire_count++] = bounds;
+    sample.append(bounds);
 }
 
 bool touches_fire(const void* agent, const Bounds& fire) {
@@ -195,15 +206,15 @@ void burn(void* mission, void* agent, float damage, float delta) {
     previous_handle_blows(agent, delta);
 }
 
-void damage_agents(void* mission, float seconds) {
+void damage_agents(void* mission, uint32_t scene, float seconds) {
     const int32_t count = field<int32_t>(mission, 4);
-    if (count <= 0 || count > 65536 || fire_count == 0) return;
+    if (count <= 0 || count > 65536 || sample.count == 0) return;
     for (int32_t i = 0; i < count; ++i) {
-        if (game_pointer(field<uint32_t>(mission_slot, 0)) != mission) break;
+        if (game_pointer(field<uint32_t>(mission_slot, 0)) != mission || field<uint32_t>(mission, 0) != scene) break;
         void* agent = agent_at(mission, i);
         if (agent == nullptr || !alive(agent)) continue;
-        for (size_t source = 0; source < fire_count; ++source) {
-            if (touches_fire(agent, fires[source])) {
+        for (size_t source = 0; source < sample.count; ++source) {
+            if (touches_fire(agent, sample.sources[source])) {
                 burn(mission, agent, kDamagePerHit * seconds / kInterval, seconds);
                 break; // Overlapping flame layers never multiply the damage rate.
             }
@@ -211,37 +222,49 @@ void damage_agents(void* mission, float seconds) {
     }
 }
 
-int32_t replacement_particle_tick(void* system, const float* delta, const void* frame) {
-    const int32_t result = previous_particle_tick(system, delta, frame);
-    if (collecting) collect_fire(system); // +240 now holds the complete world transform.
-    return result;
+void after_particle_tick(const void* system) {
+    if (mission_state.collecting) collect_fire(system); // +240 now holds the complete world transform.
+}
+
+void replacement_particle_tick(void* system, const float* delta, const void* frame) {
+    previous_particle_tick(system, delta, frame);
+    after_particle_tick(system);
+}
+
+bool observe_engine_particles() {
+    if (!MF_API_HAS(api, resolve_mod_symbol) || !api->resolve_mod_symbol) return false;
+    const auto* engine = static_cast<const mb_engine_recompile*>(
+        api->resolve_mod_symbol(context, "builtin.engine-recompile", "mb_engine_recompile_api"));
+    return engine &&
+        engine->struct_size >= offsetof(mb_engine_recompile, observe_particle_ticks) + sizeof(engine->observe_particle_ticks) &&
+        engine->observe_particle_ticks && engine->observe_particle_ticks(after_particle_tick);
 }
 
 void replacement_handle_blows(void* agent, float delta) { previous_handle_blows(agent, delta); }
 
 int32_t replacement_mission_tick(void* mission, float delta, int32_t tick_entries) {
-    if (ticking) return previous_mission_tick(mission, delta, tick_entries);
+    auto& state = mission_state;
+    if (state.ticking) return previous_mission_tick(mission, delta, tick_entries);
     const uint32_t scene = field<uint32_t>(mission, 0);
-    if (last_mission != mission || last_scene != scene) {
-        elapsed = 0;
-        last_mission = mission;
-        last_scene = scene;
+    if (state.mission != mission || state.scene != scene) {
+        state = {mission, scene};
     }
     // Clients follow the authoritative game's damage events. Zero-delta ticks
     // are paused; limiting long stalls prevents a catch-up burst on resume.
     const bool authoritative = field<int32_t>(network_mode, 0) != 1;
     const bool active = authoritative && game_pointer(field<uint32_t>(mission_slot, 0)) == mission && delta > 0 && finite(delta);
-    if (active) elapsed += minimum(delta, 0.25f);
-    const int pulses = static_cast<int>((elapsed + 0.000001f) / kInterval);
+    if (active) state.elapsed += minimum(delta, 0.25f);
+    const int pulses = static_cast<int>((state.elapsed + 0.000001f) / kInterval);
     const float seconds = active ? static_cast<float>(pulses) * kInterval : 0;
-    if (seconds > 0) elapsed = maximum(0, elapsed - seconds);
-    fire_count = 0;
-    collecting = seconds > 0;
-    ticking = true;
+    if (seconds > 0) state.elapsed = maximum(0, state.elapsed - seconds);
+    sample.count = 0;
+    state.collecting = seconds > 0;
+    state.ticking = true;
     const int32_t result = previous_mission_tick(mission, delta, tick_entries);
-    collecting = false;
-    if (seconds > 0 && game_pointer(field<uint32_t>(mission_slot, 0)) == mission) damage_agents(mission, seconds);
-    ticking = false;
+    state.collecting = false;
+    if (seconds > 0 && game_pointer(field<uint32_t>(mission_slot, 0)) == mission &&
+        field<uint32_t>(mission, 0) == scene) damage_agents(mission, scene, seconds);
+    state.ticking = false;
     return result;
 }
 } // namespace
@@ -260,13 +283,17 @@ MF_MOD_START(fire_damage)(const mf_api_v1* mod_api, const mf_mod_context_v1* mod
         reinterpret_cast<void*>(&replacement_handle_blows), reinterpret_cast<void**>(&previous_handle_blows)};
     mf_result_v1 result = api->hook_function(context, &blows);
     if (result != MF_OK) return result;
-    const mf_function_hook_v1 particles{sizeof(particles), MF_HOOK_CHAIN, "fire-particles", kGame, nullptr, kParticleTick,
-        reinterpret_cast<void*>(&replacement_particle_tick), reinterpret_cast<void**>(&previous_particle_tick)};
-    result = api->hook_function(context, &particles);
-    if (result != MF_OK) return result;
     const mf_function_hook_v1 mission{sizeof(mission), MF_HOOK_CHAIN, "fire-mission", kGame, nullptr, kMissionTick,
         reinterpret_cast<void*>(&replacement_mission_tick), reinterpret_cast<void**>(&previous_mission_tick)};
     result = api->hook_function(context, &mission);
+    if (result != MF_OK) return result;
+    // The observer sees both native and stock calls through the engine port.
+    // Install the old chain only when the service is unavailable.
+    if (!observe_engine_particles()) {
+        const mf_function_hook_v1 particles{sizeof(particles), MF_HOOK_CHAIN, "fire-particles", kGame, nullptr, kParticleTick,
+            reinterpret_cast<void*>(&replacement_particle_tick), reinterpret_cast<void**>(&previous_particle_tick)};
+        result = api->hook_function(context, &particles);
+    }
     if (result == MF_OK) api->log(context, MF_LOG_INFO, "active: fire damage follows mission simulation");
     return result;
 }

@@ -1,14 +1,15 @@
 #!/bin/sh
 # Builds a native mod package for the launcher:
 #
-#   ./build-mod.sh <mod-dir> [<out-dir>]        (default out: <mod-dir>/build)
+#   ./build-mod.sh [--include-source|--no-include-source] <mod-dir> [<out-dir>]
+#                                                  (default out: <mod-dir>/build)
 #
 # <mod-dir> holds manifest.json and one source file: mod.cpp or mod.c (also
 # accepted under native/). ANDROID_ABI=both builds one package for both launchers.
 # ARM64 game-hook bindings are generated from ARMv7 compiler contracts. The
 # source is compiled into relocatable objects, unwind indexes are stripped, and each object is
 # checked against the launcher's loader rules, so a mod that would be refused on
-# the device fails here. The package (manifest.json, mod.armv7.o) goes to <out-dir>.
+# the device fails here. Source is included in <out-dir>/source by default.
 #
 # Any compiler for 32-bit ARM works; the first one found is used unless set:
 #   CXX       compiler: Android NDK clang (ANDROID_NDK_ROOT), clang++, or a GCC
@@ -33,18 +34,65 @@ first_tool() {
     return 1
 }
 
-[ $# -ge 1 ] && [ $# -le 2 ] || die "usage: $0 <mod-dir> [<out-dir>]"
-MOD=${1%/}
-OUT=${2:-$MOD/build}
+INCLUDE_SOURCE=yes
+MOD=
+OUT=
+while [ $# -gt 0 ]; do
+    case $1 in
+        --include-source) INCLUDE_SOURCE=yes ;;
+        --no-include-source) INCLUDE_SOURCE=no ;;
+        -*) die "unknown option: $1" ;;
+        *)
+            if [ -z "$MOD" ]; then
+                MOD=$1
+            elif [ -z "$OUT" ]; then
+                OUT=$1
+            else
+                die "usage: $0 [--include-source|--no-include-source] <mod-dir> [<out-dir>]"
+            fi
+            ;;
+    esac
+    shift
+done
+[ -n "$MOD" ] || die "usage: $0 [--include-source|--no-include-source] <mod-dir> [<out-dir>]"
+MOD=${MOD%/}
+OUT=${OUT:-$MOD/build}
 [ -f "$MOD/manifest.json" ] || die "$MOD/manifest.json is missing"
 SOURCE=
-for candidate in "$MOD/mod.cpp" "$MOD/mod.c" "$MOD/native/mod.cpp" "$MOD/native/mod.c"; do
+for candidate in "$MOD/mod.cpp" "$MOD/mod.c" "$MOD/native/mod.cpp" "$MOD/native/mod.c" \
+    "$MOD/source/mod.cpp" "$MOD/source/mod.c" "$MOD/source/native/mod.cpp" "$MOD/source/native/mod.c"; do
     if [ -f "$candidate" ]; then
         SOURCE=$candidate
         break
     fi
 done
 [ -n "$SOURCE" ] || die "$MOD has no mod.cpp or mod.c"
+SOURCE_PREFIX=
+case $SOURCE in "$MOD"/source/*) SOURCE_PREFIX=source/ ;; esac
+
+copy_package_source() {
+    MOD_ROOT=$(cd "$MOD" && pwd)
+    OUT_ROOT=$(cd "$OUT" && pwd)
+    [ "$MOD_ROOT" = "$OUT_ROOT" ] && return
+    if [ "$INCLUDE_SOURCE" != yes ]; then
+        rm -rf "$OUT/source"
+        return
+    fi
+
+    mkdir -p "$OUT/source"
+    find "$MOD_ROOT" -type d \( -name .git -o -name build -o -path "$OUT_ROOT" \) -prune -o \
+        -type f \( -name '*.c' -o -name '*.cc' -o -name '*.cpp' -o -name '*.cxx' \
+            -o -name '*.h' -o -name '*.hh' -o -name '*.hpp' -o -name '*.hxx' \
+            -o -name '*.inc' -o -name '*.inl' \) -print |
+        while IFS= read -r source_file; do
+            relative=${source_file#"$MOD_ROOT"/}
+            if [ "$SOURCE_PREFIX" = source/ ]; then relative=${relative#source/}; fi
+            destination=$OUT_ROOT/source/$relative
+            mkdir -p "$(dirname "$destination")"
+            cp "$source_file" "$destination"
+        done
+}
+
 ABI=${ANDROID_ABI:-armeabi-v7a}
 COMPAT_MODE=${MF_COMPAT_MODE:-automatic}
 case $COMPAT_MODE in
@@ -55,13 +103,15 @@ if [ "$ABI" = both ]; then
     mkdir -p "$OUT"
     BOTH_STAGE=$(mktemp -d "$OUT/.build-both.XXXXXX") || die "cannot create build staging directory"
     trap 'rm -rf "$BOTH_STAGE"' EXIT HUP INT TERM
-    ANDROID_ABI=armeabi-v7a "$HERE/build-mod.sh" "$MOD" "$BOTH_STAGE/armv7"
-    ANDROID_ABI=arm64-v8a "$HERE/build-mod.sh" "$MOD" "$BOTH_STAGE/arm64"
+    if [ "$INCLUDE_SOURCE" = yes ]; then SOURCE_OPTION=--include-source; else SOURCE_OPTION=--no-include-source; fi
+    ANDROID_ABI=armeabi-v7a "$HERE/build-mod.sh" "$SOURCE_OPTION" "$MOD" "$BOTH_STAGE/armv7"
+    ANDROID_ABI=arm64-v8a "$HERE/build-mod.sh" "$SOURCE_OPTION" "$MOD" "$BOTH_STAGE/arm64"
     cp "$BOTH_STAGE/armv7/mod.armv7.o" "$BOTH_STAGE/arm64/mod.arm64.o" "$OUT/"
     cp "$BOTH_STAGE/armv7/manifest.json" "$OUT/manifest.json"
     if [ -f "$BOTH_STAGE/armv7/settings.html" ]; then
         cp "$BOTH_STAGE/armv7/settings.html" "$OUT/settings.html"
     fi
+    copy_package_source
     echo "built $OUT (ARMv7 + ARM64 package; compatibility=$COMPAT_MODE)"
     exit 0
 fi
@@ -145,7 +195,8 @@ fi
 "$CXX" $ARCH_FLAGS $COMMON_FLAGS $LANGUAGE_FLAGS -I"$HERE" -I"$(dirname "$COMPILE_SOURCE")" -I"$(dirname "$SOURCE")" \
     ${CXXFLAGS:-} "$COMPILE_SOURCE" -o "$OBJECT"
 # ARM EHABI emits an unwind index even without unwind tables; the loader maps
-# only code and data sections, and nothing in a mod unwinds.
+# only code and data sections, and nothing in a mod unwinds. Keep symbol tables
+# and strings on both ABIs: the loader resolves mod_start and declared exports.
 if [ "$ABI" = armeabi-v7a ]; then
     "$OBJCOPY" --remove-section=.ARM.exidx --remove-section=.rel.ARM.exidx "$OBJECT"
 fi
@@ -261,4 +312,5 @@ if [ -f "$MOD/settings.html" ]; then
     [ "$PAGE_SIZE" -gt 0 ] && [ "$PAGE_SIZE" -le 262144 ] || die "settings.html must be 1..256 KiB"
     cp "$MOD/settings.html" "$OUT/settings.html"
 fi
+copy_package_source
 echo "built $OUT ($OBJECT_NAME $SIZE bytes, $(basename "$CXX"))"

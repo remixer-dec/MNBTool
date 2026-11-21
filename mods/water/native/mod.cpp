@@ -3,6 +3,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
+#include "engine_recompile_api.h"
 #include "mod_api.h"
 
 extern "C" void* realloc(void*, size_t);
@@ -32,6 +33,7 @@ Step previous_step = nullptr;
 Finish previous_finish = nullptr;
 HandleBlows previous_blows = nullptr;
 AiEye get_ai_eye = nullptr;
+int (*native_eye_z)(const void*, float*) = nullptr;
 const mf_api_v1* api = nullptr;
 const mf_mod_context_v1* context = nullptr;
 const void* mission_slot = nullptr;
@@ -41,11 +43,14 @@ float water_speed = 0.5f;     // human wading speed multiplier
 float sink_speed = 2.0f;      // maximum sinking speed, m/s
 float oxygen_seconds = 10.0f; // breath before drowning hits start
 float drown_damage = 6.0f;    // one hit per second without breath
-bool ticking = false;
 bool allocation_reported = false;
-const void* last_mission = nullptr;
-uint32_t last_scene = 0;
-uint32_t mission_generation = 0;
+struct MissionState {
+    const void* mission = nullptr;
+    uint32_t scene = 0;
+    uint32_t generation = 0;
+    bool ticking = false;
+};
+MissionState mission_state;
 
 template<class T> T& field(void* base, size_t offset) {
     return *reinterpret_cast<T*>(static_cast<uint8_t*>(base) + offset);
@@ -96,10 +101,10 @@ struct Air {
 Air* air = nullptr;
 size_t air_capacity = 0;
 void reset_air() {
-    ++mission_generation;
+    ++mission_state.generation;
     if (air) memset(air, 0, air_capacity * sizeof(Air));
-    last_mission = nullptr;
-    last_scene = 0;
+    mission_state.mission = nullptr;
+    mission_state.scene = 0;
 }
 bool reserve_air(int32_t count) {
     if (count <= 0 || count > kMaxAgents) return false;
@@ -118,8 +123,15 @@ bool reserve_air(int32_t count) {
     return true;
 }
 
-// get_ai_eye (0x5aa70) refreshes the skeleton even for agents off camera and
-// returns head-bone 9's origin + 0.2 * its forward axis in world coordinates.
+// Both paths refresh the head frame even when the agent is off camera.
+float refresh_eye_z(const void* agent) {
+    float z;
+    if (native_eye_z && native_eye_z(agent, &z)) return z;
+    float eye[4]{}, direction[4]{};
+    get_ai_eye(agent, eye, direction);
+    return eye[2];
+}
+
 // There is no engine mouth accessor. Model the mouth below that eye, as a small
 // box in the animated head frame. Test its HIGHEST point, including head tilt
 // and entity scale: a partly exposed mouth must never consume oxygen.
@@ -132,10 +144,9 @@ bool mouth_submerged(const void* agent, float water) {
     const void* skeleton = game_pointer(field<uint32_t>(entity, 0x2b8));
     if (!skeleton || field<int32_t>(skeleton, 0) < 10 || field<int32_t>(skeleton, 0) > 256 ||
         field<uint32_t>(skeleton, 4) == 0) return false;
-    float eye[4]{}, direction[4]{};
-    get_ai_eye(agent, eye, direction);
+    const float eye_z = refresh_eye_z(agent);
     const uint8_t* bones = game_pointer(field<uint32_t>(skeleton, 4));
-    if (!bones || !finite(eye[2])) return false;
+    if (!bones || !finite(eye_z)) return false;
     const void* head = bones + 9 * 0x214 + 0x84;
     float z[3]{};
     for (size_t axis = 0; axis < 3; ++axis) {
@@ -145,7 +156,7 @@ bool mouth_submerged(const void* agent, float water) {
     }
     // Centre: 10 cm below the eye. Extents: 4 cm side, 2.5 cm forward,
     // 2 cm up (upper lip); units are before the entity's scale.
-    const float top = eye[2] - 0.10f * z[2] +
+    const float top = eye_z - 0.10f * z[2] +
         0.04f * absolute(z[0]) + 0.025f * absolute(z[1]) + 0.02f * absolute(z[2]);
     return finite(top) && top < water;
 }
@@ -169,13 +180,13 @@ float advance_air(Air& state, bool submerged, float delta) {
 }
 
 void drown(void* mission, void* agent, float damage, float delta) {
-    const uint32_t generation = mission_generation;
+    const uint32_t generation = mission_state.generation;
     const int32_t serial = field<int32_t>(agent, 0xc);
     const uint32_t scene = field<uint32_t>(mission, 0);
     // Consume a real combat blow first. Its scripts may kill, respawn, teleport
     // or end the mission: revalidate before creating the environmental blow.
     if (field<int32_t>(agent, kPending)) previous_blows(agent, delta);
-    if (generation != mission_generation || !active(mission) || field<uint32_t>(mission, 0) != scene || !alive(agent) ||
+    if (generation != mission_state.generation || !active(mission) || field<uint32_t>(mission, 0) != scene || !alive(agent) ||
         field<int32_t>(agent, 0xc) != serial || !mouth_submerged(agent, field<float>(mission, 0xc1b8))) return;
     // Same verified environmental-hit layout as Fire Damage. Already computed
     // damage bypasses armour; handle_blows still applies difficulty, triggers,
@@ -204,11 +215,11 @@ void update_air(void* mission, float delta) {
         return;
     }
     if (!reserve_air(count)) return;
-    const uint32_t generation = mission_generation;
+    const uint32_t generation = mission_state.generation;
     const uint32_t scene = field<uint32_t>(mission, 0);
     const float water = field<float>(mission, 0xc1b8);
     for (int32_t i = 0; i < count; ++i) {
-        if (generation != mission_generation || !active(mission) || field<uint32_t>(mission, 0) != scene) break;
+        if (generation != mission_state.generation || !active(mission) || field<uint32_t>(mission, 0) != scene) break;
         void* agent = agent_at(mission, i);
         Air& state = air[i];
         if (!alive(agent) || field<int32_t>(agent, 0x28) != 0 || field<int32_t>(agent, 8) != i) {
@@ -225,19 +236,19 @@ void update_air(void* mission, float delta) {
 }
 
 int32_t replacement_tick(void* mission, float delta, int32_t tick_entries) {
-    if (ticking) return previous_tick(mission, delta, tick_entries);
+    if (mission_state.ticking) return previous_tick(mission, delta, tick_entries);
     const uint32_t scene = field<uint32_t>(mission, 0);
-    if (last_mission != mission || last_scene != scene) {
+    if (mission_state.mission != mission || mission_state.scene != scene) {
         reset_air();
-        last_mission = mission;
-        last_scene = scene;
+        mission_state.mission = mission;
+        mission_state.scene = scene;
     }
     const bool was_active = active(mission);
-    ticking = true;
+    mission_state.ticking = true;
     const int32_t result = previous_tick(mission, delta, tick_entries);
-    if (was_active && active(mission) && last_mission == mission && last_scene == scene &&
+    if (was_active && active(mission) && mission_state.mission == mission && mission_state.scene == scene &&
         field<uint32_t>(mission, 0) == scene && seconds(delta) > 0) update_air(mission, seconds(delta));
-    ticking = false;
+    mission_state.ticking = false;
     return result;
 }
 void replacement_clear(void* mission, bool flag) {
@@ -258,11 +269,11 @@ void cap_sink(void* agent) {
 }
 void replacement_step(void* agent, const float* delta, const bool* flag) {
     void* mission = current_mission();
-    const uint32_t generation = mission_generation;
+    const uint32_t generation = mission_state.generation;
     const float dt = delta ? seconds(*delta) : 0;
     if (dt > 0 && wet(agent, mission)) cap_sink(agent);
     previous_step(agent, delta, flag);
-    if (generation == mission_generation && dt > 0 && wet(agent, mission)) {
+    if (generation == mission_state.generation && dt > 0 && wet(agent, mission)) {
         cap_sink(agent);
         // Time-based drag also catches AI-written velocities and horses. The
         // main human movement penalty is the ideal-speed hook above.
@@ -276,7 +287,7 @@ void replacement_step(void* agent, const float* delta, const bool* flag) {
 void replacement_finish(void* agent, float dt, void* new_pos, const void* old_pos,
                         float a, float b, bool c, bool d, bool e, const void* f) {
     void* mission = current_mission();
-    const uint32_t generation = mission_generation;
+    const uint32_t generation = mission_state.generation;
     const bool eligible = seconds(dt) > 0 && active(mission) && alive(agent);
     const bool was_wet = eligible && wet(agent, mission);
     const int32_t pending = eligible ? field<int32_t>(agent, kPending) : 0;
@@ -285,7 +296,7 @@ void replacement_finish(void* agent, float dt, void* new_pos, const void* old_po
     previous_finish(agent, dt, new_pos, old_pos, a, b, c, d, e, f);
     // This function only creates fall blows. Restore the queued combat blow
     // even if a stronger fall overwrote it; clearing just the flag loses hits.
-    if (eligible && generation == mission_generation && active(mission) && alive(agent) && (was_wet || wet(agent, mission))) {
+    if (eligible && generation == mission_state.generation && active(mission) && alive(agent) && (was_wet || wet(agent, mission))) {
         if (pending) memcpy(static_cast<uint8_t*>(agent) + kBlow, saved, sizeof(saved));
         field<int32_t>(agent, kPending) = pending;
     }
@@ -303,6 +314,12 @@ MF_MOD_START(water)(const mf_api_v1* mod_api, const mf_mod_context_v1* mod_conte
     network_mode = api->resolve_game_address(context, kGame, 0x7b8fdc, 4, MF_MEMORY_READ);
     get_ai_eye = reinterpret_cast<AiEye>(api->resolve_game_address(context, kGame, 0x5aa70, 4, MF_MEMORY_EXECUTE));
     if (!mission_slot || !network_mode || !get_ai_eye) return MF_ERROR_NOT_FOUND;
+    if (MF_API_HAS(api, resolve_mod_symbol) && api->resolve_mod_symbol) {
+        const auto* engine = static_cast<const mb_engine_recompile*>(
+            api->resolve_mod_symbol(context, "builtin.engine-recompile", "mb_engine_recompile_api"));
+        if (engine && engine->struct_size >= offsetof(mb_engine_recompile, agent_eye_z) + sizeof(engine->agent_eye_z))
+            native_eye_z = engine->agent_eye_z;
+    }
 
     const mf_function_hook_v1 blows{sizeof(blows), MF_HOOK_CHAIN, "water-blows", kGame, nullptr, 0x97dec,
         reinterpret_cast<void*>(&replacement_blows), reinterpret_cast<void**>(&previous_blows)};

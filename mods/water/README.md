@@ -2,7 +2,7 @@
 
 Standalone optional gameplay mod (`mbtool.water`). Installing it leaves it
 disabled until selected in Engine Mods. It is excluded from APK bundling and
-graphics presets; no launcher or frontend update is needed.
+graphics presets. This package requires M&BTool 4.3 or newer.
 
 Build with the NDK and SDK from the public MNBTool repository root:
 
@@ -48,9 +48,10 @@ same water.
 
 ## Mouth detection and evidence
 
-The engine has no mouth accessor. The mod calls `Agent::get_ai_eye` (`0x5aa70`)
-to refresh the animated head even off camera, then uses head bone 9's frame
-and the entity's world transform. The mouth is modeled as a box centred 10 cm
+The engine has no mouth accessor. The mod uses Engine Recompile's eye query
+when available, with `Agent::get_ai_eye` (`0x5aa70`) as the fallback. Both
+refresh the animated head even off camera. The mod then uses head bone 9's
+frame and the entity's world transform. The mouth is modeled as a box centred 10 cm
 below that eye, with half-extents 4 cm sideways, 2.5 cm forward and 2 cm upward.
 Its highest world-space point must be **strictly below** `Mission+0xc1b8`.
 Touching the surface or exposing part of the box restores breath. Animation,
@@ -84,8 +85,7 @@ engine's fall attribution. Water loads before Hit Vibration so hits reach it.
 
 The mission hook shares a target with Depth Texture Shadows, Engine Parity,
 Fire Damage and diagnostics; the speed hook shares a target with Touch Combat
-and Engine Parity. Current declarations are CHAIN. Older launchers with the
-shadow hook declared REPLACE require the corrected launcher to combine them.
+and Engine Parity. These are CHAIN hooks.
 
 ## Verification
 

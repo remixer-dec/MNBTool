@@ -8,7 +8,9 @@ producer. No ModFramework source checkout or PORT_ENGINE installation is needed.
 | File | What it is |
 | --- | --- |
 | `mod_api.h` | The mod interface, ABI v1: everything a mod calls goes through it. |
-| `build-mod.sh` | Builds ARMv7, ARM64, or both, generates game-hook bindings, and checks each object against the loader rules. |
+| `controls_api.h` | Essential Controls API for custom actions that can be mapped to touch, keyboard, or gamepad input. |
+| `engine_recompile_api.h` | Optional services exported by the built-in Engine Recompile mod. |
+| `build-mod.sh` | Builds ARMv7, ARM64, or both, generates game-hook bindings, and checks each object against the loader rules. Includes source by default. |
 | `mod_compat.hpp` | Public typed helpers used by compiler-generated game-hook bindings. |
 | `generate-bindings.py`, `_compiler/` | Standalone compiler producer, shared with PORT_ENGINE; requires standard Python 3.9+. |
 | `demo-mod/` | A small working mod (frame-rate log) that shows the expected style, templates included. |
@@ -22,11 +24,14 @@ cp -R demo-mod my-mod
 ANDROID_ABI=both ./build-mod.sh my-mod my-mod/out
 ```
 
-The output folder is the package: `manifest.json`, `mod.armv7.o` and
-`mod.arm64.o`. Import the **whole folder** through the launcher's mod manager;
-it selects the object matching the launcher ABI. A new package starts disabled.
-Changes apply on the next game launch. Both objects must pass before a dual-ABI
-build publishes its output; a rejected rebuild preserves the existing package.
+The output folder contains `manifest.json`, the compiled object or objects, and
+`source/` with the mod's source files and headers. For `ANDROID_ABI=both`, both
+objects must pass before the build publishes its output; a rejected rebuild preserves
+the existing package.
+
+Source inclusion is on by default. Use `--include-source` to request it explicitly,
+or `--no-include-source` for a local package that should omit the `source/` folder.
+Only source-included mod packages may be submitted to the online library.
 
 For a single target, use `ANDROID_ABI=armeabi-v7a` (the default) or
 `ANDROID_ABI=arm64-v8a`. ARMv7 still works with the original GCC toolchains.
@@ -93,14 +98,27 @@ remain a separate compatibility requirement.
 
 ### Game addresses
 
-Game structures store addresses as 32-bit words. Read them as `uint32_t` and convert
-them to a pointer as usual:
+Game structures store addresses in four-byte slots on both ARMv7 and translated
+ARM64. Keep game addresses in `uint32_t` and use `uintptr_t` for native addresses.
+Use a typed helper such as `field<T>` to read game memory at verified offsets.
 
 ```cpp
-uint32_t address;  // the game string's text pointer, at +4
-memcpy(&address, static_cast<const char*>(string) + 4, sizeof address);
+template <typename T>
+T field(const void* object, size_t offset) {
+    T value;
+    memcpy(&value, static_cast<const char*>(object) + offset, sizeof value);
+    return value;
+}
+
+const uint32_t address = field<uint32_t>(string, 4);  // Game string's text slot.
 const char* text = reinterpret_cast<const char*>(static_cast<uintptr_t>(address));
 ```
+
+For an array of game pointers, read each slot as `uint32_t` with a stride of four
+bytes. Accessors for these collections should expose a count and an indexed lookup.
+Keep `void**` and other native pointer arrays out of game memory reads and the
+interfaces that expose game collections. Hook requests' `previous` and `original`
+output slots still use the types declared in `mod_api.h`.
 
 On ARM64 the game's memory is not at its game addresses, so the build routes every
 conversion of a 32-bit integer (`uint32_t`, `int32_t`, `unsigned`, `int`, also through a
@@ -218,8 +236,11 @@ the demo's `clock_gettime`).
 
 ## Manifest
 
-The demo's manifest is a complete minimal example. Required fields:
-`schemaVersion` (1), `id`, `name`, `version`, `modAbi` (1).
+The demo's manifest is a complete minimal example. It uses `schemaVersion: 1`
+and declares `id`, `name`, `version`, and `modAbi: 1`.
+Use `schemaVersion: 2` and a numeric `minLauncherVersion` string such as `"4.3"`
+when a package needs a newer launcher. Older launchers reject that package
+before replacing an installed copy.
 
 | Field | Notes |
 | --- | --- |
@@ -228,9 +249,151 @@ The demo's manifest is a complete minimal example. Required fields:
 | `localizations` | `{ "es": { "name": ..., "summary": ... } }`; missing entries fall back to English. |
 | `hooks` | Every hook and patch the mod will request (see [Changing the game](#changing-the-game-hooks-and-patches)). |
 | `settings` | Values the player edits in the manager (below). |
-| `gameBuilds` | The game builds the mod runs on; required for offsets, byte patches and raw addresses (see [Game builds](#game-builds)). |
+| `gameConfig` | Game config values to apply while the mod is active (see [Game configuration](#game-configuration)). |
+| `controls` | Essential Controls actions and optional touch buttons for this mod (below). |
+| `gameBuilds` | The game builds the mod runs on; required for offsets, byte patches and raw addresses. |
 | `exports` / `imports` | Symbols shared with other mods (see [Working with other mods](#working-with-other-mods)). |
 | `compatibility` | `requires` (`[{ "id": ..., "version": ... }]`), `compatible`, `incompatible`, `loadAfter`, `loadBefore`, `supersedes` (lists of ids). |
+| `resolvedConflicts` | Mod IDs whose conflicting hooks this mod replaces (see [Working with other mods](#working-with-other-mods)). |
+
+### Custom touch buttons
+
+Add a button under `controls.touchButtons`. It can call an existing Essential Controls action
+directly, or an action your mod defines under `controls.actions`. Mod-defined action names must
+start with your mod id and a dot. They are available to keyboard and gamepad mapping as well as
+touch. A mod can declare up to 16 actions and 8 touch buttons. Action names must be unique; button
+`id`s use lowercase letters, digits and `_` and must be unique within the mod.
+
+The button appears in its named scene while Integrated Touch Controls is active. Players can move,
+resize, hide, or set a short custom label for it in the touch controls editor. `x` and `y` are its
+default center in percent of screen width and height (0–100); `size` is percent of the screen's
+short side (6–40). Player layout choices take precedence over these defaults.
+
+Each `controls.actions` item has a required `name` and these optional fields:
+
+| Field | Meaning |
+| --- | --- |
+| `label` | Name shown in the input mapping editors and touch editor; defaults to the action name. |
+| `when` | Essential Controls condition for when the action is available; defaults to `-` (always). |
+| `do` | Essential Controls targets to run. Omit this when the mod defines the action with a callback. |
+
+`scene` must be one of these values:
+
+| Value | Shown in |
+| --- | --- |
+| `battle` | A battle or other mission. |
+| `map` | The world map. |
+| `dialog` | A conversation or dialog with choices. |
+| `orders` | The battle orders menu. |
+| `screens` | Other game screens with a Close button, such as notes, quests, game log, or menus over a battle. |
+| `trade` | Merchant trading. |
+| `party` | The party or garrison screen. |
+
+Button `when` is optional and accepts one of these overlay conditions. If omitted, the button has no
+extra condition beyond its scene. These names are case-sensitive:
+
+| Value | True while |
+| --- | --- |
+| `armed` | The player has a weapon in hand. |
+| `choices` | A dialog has choices to move through. |
+| `crouch` | Crouching is available. |
+| `directional` | The game's attack-direction setting makes attacks directional. |
+| `dismount` | The player is riding slowly enough to dismount. |
+| `interact` | An interaction prompt is active, other than the mount prompt. |
+| `interact_on_foot` | An interaction prompt is active while on foot. |
+| `interact_riding` | An interaction prompt is active while riding. |
+| `map_look` | Map pan and zoom mode is on. |
+| `mode_switch` | The weapon in hand supports switching its mode. |
+| `mount` | A mount prompt is active while the player is on foot. |
+| `multiplayer` | A multiplayer game is active. |
+| `on_foot` | The player is on foot. |
+| `party_movable` | The party screen has a visible stack with two or more members or prisoners that can be moved. |
+| `ranged` | The player has a ranged weapon in hand. |
+| `resting` | The player is resting on the map. |
+| `shield` | The player carries a shield. |
+| `time_paused` | Time is stopped on the map. |
+| `time_passing` | Time is moving on the map, including while resting. |
+| `troops` | There are troops available to receive orders. |
+| `weapons` | The player carries at least one weapon. |
+
+The button's `when` is a single overlay condition. It is separate from the action's Essential
+Controls `when`, which uses the action condition syntax documented in [controls_api.h](controls_api.h).
+
+Provide exactly one of `label` and `icon` in each button object. `label` is text of up to three
+characters (grapheme clusters); players may replace it with their own short label in the editor.
+`icon` is inline SVG path data in the button object, on a 24-unit square; the renderer reads only
+path data, not an SVG document or an asset path. Supported path commands are `M`, `L`, `H`, `V`,
+`C`, `S`, `Q`, and `Z` (either case); the path is drawn as a stroke. Use either form:
+
+```json
+"label": "GO"
+```
+
+```json
+"icon": "M4 12h16M12 4v16"
+```
+
+If the button uses a mod-defined action, the `action` must match its `controls.actions[].name`.
+If it uses an existing Essential Controls action, use that action's name directly and no action
+declaration is needed. An optional top-level `controls.setting` names one of the mod's BOOL settings;
+the mod's declared actions and buttons are available only while that setting is on.
+
+If you also author a game module, its language files can customize the button in
+`languages/<language>/touch.csv`. Use the row id `mod.<mod id>.<button id>` followed by `.icon`,
+`.color`, `.background`, `.x`, `.y`, `.size`, or `.shown`; the player's saved position and visibility
+still take precedence over module defaults. `<id>.<action>.icon` sets an icon for one action when a
+button changes action. This is useful for a mod distributed with a module, but not required for a
+standalone mod package.
+
+```json
+"imports": [{ "mod": "builtin.controls", "symbols": ["mb_controls_api"] }],
+"compatibility": { "requires": [{ "id": "builtin.controls" }] },
+"controls": {
+  "actions": [{
+    "name": "example.mod.activate",
+    "label": "Activate",
+    "when": "window=map"
+  }],
+  "touchButtons": [{
+    "id": "activate",
+    "action": "example.mod.activate",
+    "scene": "map",
+    "x": 8,
+    "y": 30,
+    "size": 8,
+    "when": "party_movable",
+    "icon": "M4 12h16M12 4v16"
+  }]
+}
+```
+
+When an action has no `do` target, define it from the mod with `define_callback_action`. Its
+callback runs on the game thread when the action changes; a nonzero `x` or `y` is a press and
+`(0, 0)` is release. Keep it short and hand longer work off safely. For an action that only needs
+Essential Controls targets, put those in `do` instead and no callback is needed. The
+[Essential Controls API header](controls_api.h) documents the callback and target formats.
+
+```cpp
+#include "mod_api.h"
+#include "controls_api.h"
+
+static void activate(const char*, float x, float y, void*) {
+    if (x == 0.0f && y == 0.0f) return; // release
+    // Start the mod feature; avoid blocking the game thread.
+}
+
+MF_MOD_START(example_mod)(const mf_api_v1* api, const mf_mod_context_v1* context) {
+    const mb_controls* controls = (const mb_controls*)
+        api->resolve_mod_symbol(context, "builtin.controls", "mb_controls_api");
+    if (controls == nullptr ||
+        !controls->define_callback_action("example.mod.activate", "window=map", activate, nullptr))
+        return MF_ERROR_NOT_FOUND;
+    return MF_OK;
+}
+```
+
+This is the same pattern used by TTS/STT Mod's **Voice orders** action: its manifest adds the
+microphone button, and its callback starts voice recognition.
 
 ### Settings
 
@@ -253,17 +416,28 @@ manifest default, already within `min` and `max`. The last argument is only a fa
 for a key that is undeclared or declared with another type; the launcher logs that
 mistake. Values are fixed for the game process.
 
-### Game builds
+### Game configuration
 
-Offsets only make sense for one exact build of the game library, so a mod that uses
-offsets, byte patches or raw addresses must list the builds it was made for. Each
-entry is either:
-- `"default"`: every build this launcher recognizes. Use it when you made the mod
-  against the game the launcher supports.
-- `"sha256:<hex>"`: one specific build, the SHA-256 of its `libMBExpMobile.so`.
+Declare `gameConfig` if your mod needs specific values in `rgl_config.txt`. Each key
+takes a fixed string, number, or boolean, or maps the values of a field in your mod's
+`settings` to game config values. Booleans are written as `1` or `0`. If the player's
+setting has no entry in `values`, your mod leaves that key alone.
 
-On any other build the manager refuses to enable the mod. A mod without offsets can
-leave `gameBuilds` out and runs on any build.
+For a mod that declares a BOOL setting named `high-quality-hdr`, the manifest can
+set `postfx_hdr` based on that setting and set `postfx_autoexp` to `1`.
+
+```json
+"gameConfig": {
+  "postfx_hdr": { "setting": "high-quality-hdr", "values": { "true": 2, "false": 1 } },
+  "postfx_autoexp": true
+}
+```
+
+The launcher applies these values before launch and skips keys absent from the file.
+Once no active mod requests a key, the launcher restores the player's value if the
+applied value is still in place. A change the player makes while the key is held is
+kept as their own value. Active mods can request the same value for a key. Different
+values for one key make the launch plan fail.
 
 ## Changing the game: hooks and patches
 
@@ -274,8 +448,8 @@ to install each hook or patch. The framework then:
 - settles which mod gets what when several mods touch the same place;
 - installs everything safely, and connects chained hooks.
 
-Use a request in `mod_start`, once for each hook or patch declared in the manifest.
-There are three kinds:
+Declare every hook or patch your mod may install and submit its request from
+`mod_start` when your mod needs it. There are three kinds:
 
 | You want to | Function | Request struct | Declaration `mechanism` |
 | --- | --- | --- | --- |
@@ -304,28 +478,53 @@ request.previous = (void**)&g_previous_swap; // where the framework stores what 
 mf_result_v1 result = api->hook_import(context, &request);
 ```
 
-A request that does not match a declaration, or whose hook the player switched off,
-is refused with `MF_ERROR_DENIED`. The other two requests work the same way:
+A request must match its manifest declaration. A disabled declaration returns
+`MF_ERROR_DENIED`. If the hook is optional, skip the feature that needs it and let
+the rest of your mod start. Return an error for a hook the mod cannot work without.
+
+The other two request types also use manifest declarations.
+
 - **Function hooks** (`mf_function_hook_v1`) name `target_library` and either an
-  `offset` (needs [game builds](#game-builds)) or an exported `symbol`. The address must
+  `offset` (needs `gameBuilds`) or an exported `symbol`. The address must
   be the first instruction of a function. `original` receives the function to call
   through.
 - **Byte patches** (`mf_byte_patch_v1`) give `offset`, `byte_count`, the
   `expected_bytes` now there, and the `replacement_bytes`. If the current bytes differ,
   nothing is written (`MF_ERROR_PATCH_MISMATCH`).
 
-Import hooks: `caller` must be a game library (`libMBExpMobile.so`, `libfmodex.so`).
-System functions are limited to graphics (`gl*`, `egl*`), logging, input and window
-queries, maths, memory/string, time and locking.
+For an import hook, `caller` must be a game library (`libMBExpMobile.so`, `libfmodex.so`).
+Check that it calls the symbol through a PLT/GOT import. Finding an export in the
+provider's symbol table only tells you the symbol is available. Use a function hook
+for direct calls to a verified game function entry. System imports are limited to
+graphics (`gl*`, `egl*`), logging, input and window queries, maths, memory/string,
+time and locking.
 
-`behavior` says how you share the target with other mods:
-- `CHAIN`: your replacement always calls the previous function (`previous` or
+The `behavior` field controls how you share the target with other mods.
+
+- With `CHAIN`, your replacement always calls the previous function (`previous` or
   `original`), so other mods' `CHAIN` hooks on the same target run too. Read the
-  pointer at every call: it changes when another mod joins the chain.
-- `REPLACE`: you may skip the original. A second claim on the same target conflicts.
-  Built-in mods' links come first and chain too, except on the few functions a built-in
-  implements itself; the launcher names the built-in when a plan conflicts.
-- `EXCLUSIVE`: nobody else may claim the target.
+  pointer at every call because it changes when another mod joins the chain.
+- With `REPLACE`, you may skip the original. A function replacement conflicts with any
+  second claim. Sharing an import with a `REPLACE` hook requires the mods to declare
+  compatibility and have an explicit order in the launch plan.
+- With `EXCLUSIVE`, your mod is the sole claimant of the target.
+
+For both import and function hooks, packaged mods' links run in installation order.
+On a shared target, `loadAfter` puts your link later in the chain, where an earlier
+link can reach it through `previous` or `original`.
+
+### OpenGL state and renderer caches
+
+For each OpenGL hook, document which GL state it changes or restores, and keep that
+description current if the hook starts touching more state. This lets renderers know
+which cached state remains valid across the hook. For example, a hook that only updates
+its own shader uniform leaves cached vertex attributes and buffer bindings intact.
+
+Gamma Restore shows how a renderer can safely recognize a narrow `glUseProgram` hook:
+its helper identifies that hook and returns the next link, while the renderer still calls
+the full chain. It keeps cached state only when every link is recognized and the chain
+ends at GLES. An unknown link may change arbitrary state, so it triggers normal cache
+invalidation. Use the same explicit state contract for other GL hooks.
 
 ## Working with other mods
 
@@ -340,6 +539,28 @@ queries, maths, memory/string, time and locking.
   shares in `"exports": ["name"]`. You declare `"imports": [{ "mod": "<id>", "symbols":
   ["name"] }]` and get the address with `resolve_mod_symbol`. Providers start before
   their users.
+- **Replace conflicting hooks from another mod.** Use `"resolvedConflicts": ["other.id"]`
+  only when your mod provides the conflicting hooks' behavior. If both mods are active,
+  the launcher disables only the other mod's conflicting declarations. The conflict must
+  be detectable from the manifests. The other mod can be absent. If a replacement covers
+  several mods, list each ID directly. Chains and cycles over the same hook claims are
+  rejected.
+
+### Engine Recompile services
+
+- **Observe a ported function.** If Engine Recompile offers an observer for the
+  event you need, register it during `mod_start`. Declare a CHAIN hook as the
+  fallback and link it only when registration fails.
+- **Reuse a native query.** Use the service when it provides the same result.
+  Keep the stock game call for cases the service cannot handle.
+- **Hook other game functions.** Use a regular CHAIN hook when no service
+  covers the function.
+
+The [Engine Recompile API header](engine_recompile_api.h) shows the import
+declaration and which thread each service runs on. Check that
+`resolve_mod_symbol` is available and that the returned table's `struct_size`
+covers the member before using it. With a stock fallback, the import can stay
+optional and the mod can still run when Engine Recompile is off.
 
 ## Templates and text edits
 

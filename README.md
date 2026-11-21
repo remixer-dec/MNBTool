@@ -11,8 +11,9 @@ of the game. This project is not affiliated with TaleWorlds Entertainment.
 
 ## Build a mod
 
-The SDK includes its headers, build script and ARM64 binding generator. It requires
-an Android NDK and standard Python 3.9+.
+The SDK includes its headers, build script and ARM64 binding generator. ARMv7 builds
+work with any 32-bit ARM compiler; ARM64 and dual-target builds require NDK Clang and
+standard Python 3.9+.
 From this repository's root:
 
 ```sh

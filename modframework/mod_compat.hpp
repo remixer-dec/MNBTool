@@ -42,6 +42,10 @@ struct Services {
     const mf_api_v1* api = nullptr;
     const mf_mod_context_v1* context = nullptr;
     const mf_game_services_v1* game = nullptr;
+    // The contract's fast paths, when it has them (zero/false: the calls above).
+    uintptr_t window = 0;
+    bool words = false;
+    bool direct = false;
     bool bind(const mf_api_v1* candidate, const mf_mod_context_v1* owner) {
         if (!candidate || !owner || candidate->abi_version != MF_NATIVE_ABI_VERSION ||
             !MF_API_HAS(candidate, get_game_services) || !candidate->get_game_services ||
@@ -50,7 +54,13 @@ struct Services {
         auto* contract = candidate->get_game_services(owner);
         if (!contract || contract->struct_size < sizeof(mf_game_services_v1) ||
             contract->source_abi != MF_GAME_ABI_ARM32_BASE) return false;
-        api = candidate; context = owner; game = contract; return true;
+        api = candidate; context = owner; game = contract;
+        if (MF_GAME_SERVICES_HAS(contract, direct_callbacks)) {
+            window = contract->window_base;
+            words = contract->read_stack_words && contract->write_stack_words;
+            direct = contract->direct_callbacks != 0;
+        }
+        return true;
     }
     // A broken contract stops the game; the reason goes to the mod's log first.
     void require(bool valid, const char* reason) const {
@@ -70,12 +80,28 @@ struct Services {
                 game->write_stack(context, static_cast<uint32_t>(index), value) == MF_OK,
                 "game hook: cannot write the game's stack arguments");
     }
+    // count consecutive stack words from index, in one call where the contract allows.
+    void read(size_t index, uint32_t* values, size_t count) const {
+        if (!count) return;
+        if (!words) { for (size_t i = 0; i < count; ++i) values[i] = read(index + i); return; }
+        require(index + count <= 60 && game->read_stack_words(context, static_cast<uint32_t>(index), values,
+                                                              static_cast<uint32_t>(count)) == MF_OK,
+                "game hook: cannot read the game's stack arguments");
+    }
+    void write(size_t index, const uint32_t* values, size_t count) const {
+        if (!count) return;
+        if (!words) { for (size_t i = 0; i < count; ++i) write(index + i, values[i]); return; }
+        require(index + count <= 60 && game->write_stack_words(context, static_cast<uint32_t>(index), values,
+                                                               static_cast<uint32_t>(count)) == MF_OK,
+                "game hook: cannot write the game's stack arguments");
+    }
     template<class T> T decode(uint64_t bits) const {
         static_assert(core_type<T>, "Unsupported source core-register type");
         if constexpr (std::is_pointer_v<T>) {
             if (!bits) return nullptr;
-            require(game && game->decode_pointer, "game hook: no game memory services");
             require(bits <= UINT32_MAX, "game hook: a game address wider than 32 bits");
+            if (window) return reinterpret_cast<T>(window + static_cast<uintptr_t>(bits));
+            require(game && game->decode_pointer, "game hook: no game memory services");
             // As a C cast on ARMv7: game code passes literals as char*, end pointers and
             // sentinels, so the memory is checked only where the mod uses it.
             void* value = game->decode_pointer(context, static_cast<uint32_t>(bits), 0, 0);
@@ -89,6 +115,8 @@ struct Services {
         static_assert(core_type<T>, "Unsupported source core-register type");
         if constexpr (std::is_pointer_v<T>) {
             if (!value) return 0;
+            const uintptr_t address = reinterpret_cast<uintptr_t>(value);
+            if (window && address > window && address - window <= UINT32_MAX) return address - window;
             uint32_t bits = 0;
             require(game && game->encode_pointer &&
                     game->encode_pointer(context, value, &bits) == MF_OK,
@@ -143,8 +171,9 @@ struct Hook<SR (*)(SA...), NR (*)(NA...), Replacement, Tag> {
     }
     static uint64_t entry(uint32_t a, uint32_t b, uint32_t c, uint32_t d) {
         Words words{}; words[0]=a; words[1]=b; words[2]=c; words[3]=d;
-        for (size_t i=4; i<word_count; ++i) words[i] = services.read(i-4);
+        if constexpr (word_count > 4) services.read(0, &words[4], word_count-4);
         Task task{&words, 0};
+        if (services.direct) { run(&task); return task.result; }
         services.require(services.api && services.api->invoke_callback(services.context, run, &task) == MF_OK,
                          "game hook: the framework did not run the replacement");
         return task.result;
@@ -152,7 +181,7 @@ struct Hook<SR (*)(SA...), NR (*)(NA...), Replacement, Tag> {
     struct Restore {
         Buffer<uint32_t, word_count-4> words{};
         size_t changed = 0;
-        ~Restore() { for (size_t i=0; i<changed; ++i) services.write(i, words[i]); }
+        ~Restore() { services.write(0, &words[0], changed); }
     };
     template<size_t... I> static Words pack(Indices<I...>, NA... args) {
         Words words{}; (encode<SA>(words, offsets[I], static_cast<SA>(args)), ...); return words;
@@ -163,9 +192,10 @@ struct Hook<SR (*)(SA...), NR (*)(NA...), Replacement, Tag> {
         services.require(original != nullptr, "game hook: the original game function is not bound yet");
         const auto words = pack(IndicesFor<SA...>{}, args...);
         Restore restore;
-        for (size_t i=4; i<word_count; ++i) {
-            restore.words[i-4] = services.read(i-4);
-            services.write(i-4, words[i]); ++restore.changed;
+        if constexpr (word_count > 4) {
+            services.read(0, &restore.words[0], word_count-4);
+            restore.changed = word_count-4;
+            services.write(0, &words[4], word_count-4);
         }
         uint64_t result = original(words[0], words[1], words[2], words[3]);
         // A one-word result leaves r1 undefined.

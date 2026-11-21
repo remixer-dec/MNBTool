@@ -23,7 +23,7 @@
     "about": "2026"
   },
   "launcher": {
-    "version": "4.2",
+    "version": "4.3",
     "url": "https://t.me/rdreleases"
   },
   "builtIns": [],
@@ -41,7 +41,7 @@
           "summary": "Авторы: garic93, gaxleep, jabdimelborn. Пропуски дополнены и проверены ИИ."
         }
       },
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-it-1.0.zip",
+      "url": "files/translations/native-it-1.0.zip",
       "sha256": "57621202705ccc0f36bd16751e500eacc4eaa890c4c76433601b92f0544fcf06",
       "size": 351127
     },
@@ -57,7 +57,7 @@
           "summary": "Автор: gilberto-009199. Пропуски дополнены и проверены ИИ."
         }
       },
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-pt-1.0.zip",
+      "url": "files/translations/native-pt-1.0.zip",
       "sha256": "8f574793a073cfc946cbc714d642653f5ab074582586322ac8c2f90678a6403e",
       "size": 338394
     },
@@ -73,7 +73,7 @@
           "summary": "Авторы: 프리쉐어, tuitenlakiett. Пропуски дополнены и проверены ИИ."
         }
       },
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-ko-1.1.zip",
+      "url": "files/translations/native-ko-1.1.zip",
       "sha256": "266a7e1e721f84b92d71ffb876d1aed1692a4a37eb2b7364d913ebd23eded84c",
       "size": 1563693
     },
@@ -89,7 +89,7 @@
           "summary": "Автор: codon1minh44. Пропуски дополнены и проверены ИИ."
         }
       },
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-vi-1.1.zip",
+      "url": "files/translations/native-vi-1.1.zip",
       "sha256": "623d1411979708126e5fb806ac3f69b65381482f61f11cf54d264e57c608b1be",
       "size": 433204
     },
@@ -100,7 +100,7 @@
       "version": "1.1",
       "module": "Native|Calradia",
       "ai": true,
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-id-1.1.zip",
+      "url": "files/translations/native-id-1.1.zip",
       "sha256": "2a283647c887c9b9665a8047d09688e988964604699af51114f4f2dcc0184033",
       "size": 314381
     },
@@ -111,7 +111,7 @@
       "version": "1.2",
       "module": "Native|Calradia",
       "ai": true,
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-he-1.2.zip",
+      "url": "files/translations/native-he-1.2.zip",
       "sha256": "0db6d4659aeaff00a0eea549e1945b9546f8222e9266e129d39a6fb7e7e3536c",
       "size": 898980
     },
@@ -122,7 +122,7 @@
       "version": "1.2",
       "module": "Native|Calradia",
       "ai": true,
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-ar-1.2.zip",
+      "url": "files/translations/native-ar-1.2.zip",
       "sha256": "2b21f3fde15abb0a17bb6ccde49626e1361dbddec0c3497013644a24a671d0b4",
       "size": 920023
     },
@@ -133,7 +133,7 @@
       "version": "1.3",
       "module": "Native|Calradia",
       "ai": true,
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-fa-1.3.zip",
+      "url": "files/translations/native-fa-1.3.zip",
       "sha256": "7b5408b546039cf2c7005058bf7095fc7f45e41c6d95daf15de2ecb406960e5e",
       "size": 920011
     },
@@ -144,7 +144,7 @@
       "version": "1.3",
       "module": "Native|Calradia",
       "ai": true,
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-ur-1.3.zip",
+      "url": "files/translations/native-ur-1.3.zip",
       "sha256": "2f86fd2dbcfef74e10b78bef9fea181dec847d78d7f22d0dce478e43821fdc16",
       "size": 927939
     },
@@ -155,7 +155,7 @@
       "version": "1.1",
       "module": "Native|Calradia",
       "ai": true,
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/native-th-1.1.zip",
+      "url": "files/translations/native-th-1.1.zip",
       "sha256": "25ececc9b3dc439378ebd75703768b091e45e29c9325396c9b37146f74f46cfd",
       "size": 754384
     },
@@ -167,7 +167,7 @@
       "module": "Persistent World|Persistent_World|PW_4.5",
       "ai": true,
       "summary": "Persistent World's own text. Needs the Spanish game translation installed.",
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/pw-es-1.0.zip",
+      "url": "files/translations/pw-es-1.0.zip",
       "sha256": "611a06dfef6d17731c403359a1feaa74b4b482fab27e362fadc29a01e4f9bebb",
       "size": 39545
     },
@@ -179,7 +179,7 @@
       "module": "Persistent World|Persistent_World|PW_4.5",
       "ai": true,
       "summary": "Persistent World's own text. Needs the Portuguese game translation installed.",
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/pw-pt-1.0.zip",
+      "url": "files/translations/pw-pt-1.0.zip",
       "sha256": "8a554bbf60193a1a2728c5beb49bfe81dd4298025c097051a5a7353b0be1dde9",
       "size": 39727
     },
@@ -191,7 +191,7 @@
       "module": "Persistent World|Persistent_World|PW_4.5",
       "ai": true,
       "summary": "Persistent World's own text. Needs the Indonesian game translation installed.",
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/pw-id-1.0.zip",
+      "url": "files/translations/pw-id-1.0.zip",
       "sha256": "0909c742338fc965cad8675a9acaccc665b622c68a016a80f7f1d66e76aa1c8f",
       "size": 37805
     },
@@ -203,7 +203,7 @@
       "module": "Persistent World|Persistent_World|PW_4.5",
       "ai": true,
       "summary": "Persistent World's own text. Needs the Russian game translation installed.",
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/pw-ru-1.0.zip",
+      "url": "files/translations/pw-ru-1.0.zip",
       "sha256": "b1113a58beb55fdc6c3c9690ba47fcb1a2676d9c1751f98e4288438259c95a3c",
       "size": 47487
     },
@@ -215,7 +215,7 @@
       "module": "Persistent World|Persistent_World|PW_4.5",
       "ai": true,
       "summary": "Persistent World's own text. Needs the Simplified Chinese game translation installed.",
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/pw-cns-1.0.zip",
+      "url": "files/translations/pw-cns-1.0.zip",
       "sha256": "ff153882f43354507ecded0725de56215a09d16ae63c45cdcb8f7a20be01cc07",
       "size": 40315
     },
@@ -227,7 +227,7 @@
       "module": "Persistent World|Persistent_World|PW_4.5",
       "ai": true,
       "summary": "Persistent World's own text. Needs the Traditional Chinese game translation installed.",
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/pw-cnt-1.0.zip",
+      "url": "files/translations/pw-cnt-1.0.zip",
       "sha256": "891455f4f01e1582049ffe5695d4f922788224a84200dee65e8d86306a7a4a50",
       "size": 40359
     },
@@ -239,7 +239,7 @@
       "module": "Persistent World|Persistent_World|PW_4.5",
       "ai": true,
       "summary": "Persistent World's own text. Needs the Arabic game translation installed.",
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/pw-ar-1.0.zip",
+      "url": "files/translations/pw-ar-1.0.zip",
       "sha256": "d854b392de1b873213553ef8ac631d8150d3a8c8df3d45050e89e5e597f8874f",
       "size": 42645
     }
@@ -329,11 +329,11 @@
       "name": "Fire Damage",
       "author": "remixer-dec",
       "category": "Gameplay",
-      "version": "1.1.3",
+      "version": "1.1.4",
       "summary": "Active flames burn nearby people and horses, including fires on props, carried items and scripted bursts.",
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mnbtool.fire-damage-1.1.3.zip",
-      "sha256": "2d4ec87d068299f17048661558269ee868e84a9e0589dce6de0fa690d0e043fe",
-      "size": 14850
+      "url": "files/mods/mnbtool.fire-damage-1.1.4.zip",
+      "sha256": "101a59a74354c35382608e172c88633039149ef89592e73280d3bcaa11406575",
+      "size": 15624
     },
     {
       "id": "mbtool.water",
@@ -359,11 +359,11 @@
       "name": "Water Physics & Drowning",
       "author": "remixer-dec",
       "category": "Gameplay",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "summary": "Slower wading and sinking, softer water landings, and limited breath while the mouth is fully submerged. Single player and hosts only.",
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mnbtool.water-1.1.0.zip",
-      "sha256": "b5e919ca3774ae537f327c4f2f2afb648aaa757fd9f8f2106836c9085e3a9f73",
-      "size": 17273
+      "url": "files/mods/mnbtool.water-1.1.1.zip",
+      "sha256": "1345e2930409500db30c3628b7a1c91a29c507e47210d602b4766886c661c5ec",
+      "size": 18242
     },
     {
       "id": "mbtool.held-item-price-fix",
@@ -395,16 +395,132 @@
       "category": "Input",
       "version": "1.0.0",
       "summary": "Fixes the wrong price shown for an item held by touch in trade and inventory.",
-      "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mnbtool.held-item-price-fix-1.0.0.zip",
+      "url": "files/mods/mnbtool.held-item-price-fix-1.0.0.zip",
       "sha256": "437c4523e1b216a9cbaccd9a4e96073c2484777a6ad7b03ea863dcd879a815a3",
       "size": 5078
+    }
+  ],
+  "modUpdates": [
+    {
+      "id": "mbtool.fire-damage",
+      "verified": true,
+      "minLauncherVersion": "4.3",
+      "name": "Fire Damage",
+      "author": "remixer-dec",
+      "category": "Gameplay",
+      "version": "1.1.5",
+      "summary": "Active flames burn nearby people and horses, including fires on props, carried items and scripted bursts.",
+      "localizations": {
+        "bn": {
+          "name": "আগুনের ক্ষতি",
+          "summary": "জ্বলন্ত আগুন কাছের মানুষ ও ঘোড়াকে পুড়িয়ে দেয়, এর মধ্যে বস্তুর আগুন, হাতে বহন করা জিনিসের আগুন এবং স্ক্রিপ্টে সৃষ্ট অগ্নিবিস্ফোরণও রয়েছে।"
+        },
+        "cs": {
+          "name": "Poškození ohněm",
+          "summary": "Aktivní plameny spalují blízké lidi i koně, včetně ohňů na objektech, nesených předmětů a skriptovaných výbuchů."
+        },
+        "de": {
+          "name": "Feuerschaden",
+          "summary": "Aktive Flammen verbrennen Menschen und Pferde in der Nähe, auch Feuer an Objekten, getragenen Gegenständen und skriptgesteuerte Stichflammen."
+        },
+        "el": {
+          "name": "Ζημιά από φωτιά",
+          "summary": "Οι ενεργές φλόγες καίνε κοντινούς ανθρώπους και άλογα, συμπεριλαμβανομένων των φωτιών σε αντικείμενα, σε φερόμενα αντικείμενα και σε εκρήξεις από σενάρια."
+        },
+        "es": {
+          "name": "Daño por fuego",
+          "summary": "Las llamas activas queman a las personas y caballos cercanos, incluidos fuegos en objetos del escenario, objetos portados y estallidos programados por scripts."
+        },
+        "fr": {
+          "name": "Dégâts du feu",
+          "summary": "Les flammes actives brûlent les personnes et les chevaux à proximité, y compris les feux sur les objets de décor, les objets portés et les explosions scriptées."
+        },
+        "hi": {
+          "name": "आग से नुकसान",
+          "summary": "जलती लपटें पास के लोगों और घोड़ों को झुलसा देती हैं, जिनमें वस्तुओं पर लगी आग, हाथ में ली गई चीज़ों की आग और स्क्रिप्ट से भड़की लपटें शामिल हैं।"
+        },
+        "id": {
+          "name": "Kerusakan Api",
+          "summary": "Api yang menyala membakar orang dan kuda di dekatnya, termasuk api pada objek, benda yang dibawa, dan ledakan api dari skrip."
+        },
+        "it": {
+          "name": "Danni da fuoco",
+          "summary": "Le fiamme attive bruciano persone e cavalli vicini, compresi i fuochi su oggetti di scena, oggetti trasportati ed esplosioni da script."
+        },
+        "ja": {
+          "name": "火炎ダメージ",
+          "summary": "燃えている炎が近くの人や馬を焼きます。物体の火、持ち運ぶアイテムの火、スクリプトによる炎の噴出も対象です。"
+        },
+        "ko": {
+          "name": "화염 피해",
+          "summary": "활성 화염이 근처의 사람과 말을 태웁니다. 소품의 불, 들고 있는 물건의 불, 스크립트로 발생한 불길도 포함됩니다."
+        },
+        "pl": {
+          "name": "Obrażenia od ognia",
+          "summary": "Aktywne płomienie parzą pobliskie osoby i konie, także ogień na obiektach, przenoszonych przedmiotach i skryptowe wybuchy."
+        },
+        "pt-rBR": {
+          "name": "Dano de fogo",
+          "summary": "Chamas ativas queimam pessoas e cavalos próximos, incluindo fogo em objetos do cenário, itens carregados e explosões de script."
+        },
+        "ru": {
+          "name": "Урон от огня",
+          "summary": "Пламя обжигает людей и лошадей рядом, в том числе огонь на предметах, в руках и в скриптовых вспышках."
+        },
+        "th": {
+          "name": "ความเสียหายจากไฟ",
+          "summary": "เปลวไฟที่กำลังลุกไหม้ทำให้คนและม้าที่อยู่ใกล้ได้รับบาดเจ็บ รวมถึงไฟบนวัตถุ ไอเทมที่ถือ และไฟที่สคริปต์สั่งให้ลุกขึ้น"
+        },
+        "tr": {
+          "name": "Ateş Hasarı",
+          "summary": "Etkin alevler yakındaki insanları ve atları yakar; nesnelerdeki, taşınan eşyalardaki ve betikli alev patlamalarındaki ateşler de dahildir."
+        },
+        "vi": {
+          "name": "Sát thương lửa",
+          "summary": "Ngọn lửa đang cháy thiêu đốt người và ngựa ở gần, kể cả lửa trên vật thể, vật đang cầm và các đợt lửa do kịch bản kích hoạt."
+        },
+        "zh-rCN": {
+          "name": "火焰伤害",
+          "summary": "燃烧中的火焰会灼伤附近的人和马，包括道具上的火、手持物品上的火以及脚本触发的火焰爆发。"
+        },
+        "zh-rTW": {
+          "name": "火焰傷害",
+          "summary": "燃燒中的火焰會灼傷附近的人與馬，包括道具上的火、手持物品上的火，以及腳本觸發的火焰爆發。"
+        }
+      },
+      "url": "files/mods/mnbtool.fire-damage-1.1.5.zip",
+      "sha256": "fb6fc99472d21941dadbc3f40d5e66d636d69b873094f9c5f445d5d6f3fc89b1",
+      "size": 16024
+    },
+    {
+      "id": "mbtool.water",
+      "verified": true,
+      "minLauncherVersion": "4.3",
+      "name": "Water Physics & Drowning",
+      "author": "remixer-dec",
+      "category": "Gameplay",
+      "version": "1.1.2",
+      "summary": "Slower wading and sinking, softer water landings, and limited breath while the mouth is fully submerged. Single player and hosts only.",
+      "localizations": {
+        "es": {
+          "name": "Física del agua y ahogamiento",
+          "summary": "Movimiento y hundimiento más lentos, caídas al agua sin daño y aire limitado con la boca totalmente sumergida. Solo en un jugador y anfitriones."
+        },
+        "ru": {
+          "name": "Физика воды и утопление",
+          "summary": "Замедляет движение и погружение, смягчает падения в воду и ограничивает запас воздуха при полном погружении рта. Для одиночной игры и хоста."
+        }
+      },
+      "url": "files/mods/mnbtool.water-1.1.2.zip",
+      "sha256": "d0ccbf84c6741ff062fe33449d2cb4cfd0fd8b848d6c971d2de2413ef28037ad",
+      "size": 18219
     }
   ],
   "resourcePacks": [],
   "mobilePatch": {
     "id": "mobile-patch",
     "version": "1",
-    "url": "https://github.com/remixer-dec/MNBTool/releases/download/asset-release/mobile-patch-1.zip",
+    "url": "files/mobile-patch/mobile-patch-1.zip",
     "sha256": "af7c428facb26876dbacda2e78bd09d2063805dac388583a43e61174691afdfd",
     "size": 6285895
   },
@@ -414,7 +530,7 @@
       "name": "Gekokujo",
       "author": "Marty Olson (marty4286)",
       "summary": "Total conversion set in Sengoku-era Japan.",
-      "description": "Gekokujo takes Warband to Sengoku-era Japan: clans fight for the country with ashigaru and samurai, bows and guns, and lords carry their historical banners.\n\nVersion 3.0 adds an opening mission, freelancing with promotion from ashigaru to samurai, agents (ninja) that open castle walls, basic battle formations for the AI, sea routes with sea battles, forts with free storage and recruits, and a detailed map from Kyushu to Ezo with Ikko temple fortresses. Weapons, armour, clothing, music and scenes are new or reworked.\n\nThe mod is in English only: in other languages, text it did not translate shows Native's translation.",
+      "description": "Gekokujo takes Warband to Sengoku-era Japan: clans fight for the country with ashigaru and samurai, bows and guns, and lords carry their historical banners.\n\nVersion 3.0 adds an opening mission, freelancing with promotion from ashigaru to samurai, agents (ninja) that open castle walls, basic battle formations for the AI, sea routes with sea battles, forts with free storage and recruits, and a detailed map from Kyushu to Ezo with Ikko temple fortresses. Weapons, armour, clothing, music and scenes are new or reworked.\n\nThe mod is in English only: in other languages, text it did not translate shows Native's translation.\n\nMany unofficial versions exist, so names are confusing. This entry is the original.\n\nVersions:\n1. Original Gekokujo: the Japanese overhaul. Version 3.0 was finished in 2014; 3.1 was left as an unfinished beta. https://www.moddb.com/mods/gekokujo\n2. Hatamoto Edition: adds roleplaying features: buying property, weapon customization, duels, character traits and other mechanics. Playable, development appears inactive. https://www.nexusmods.com/mbwarband/mods/6276\n3. Daimyo Edition Reimagined: a branch of Daimyo Edition (new weapons, armour, animations and mechanics), adding more troops, combat improvements and visual changes. Playable, development appears inactive. https://www.moddb.com/mods/gekokujo-daimyo-edition-reimagined-submod\n4. Hubii's Unofficial Gekokujo Patch: not a new version, but bug fixes and improvements for Hatamoto and Daimyo Reimagined. Still receiving updates in 2026. https://www.moddb.com/mods/unofficial-gekokujo-patch\n\nLineage: Original Gekokujo leads to Hatamoto Edition and Daimyo Edition, and Daimyo Edition leads to Daimyo Reimagined. Hubii's patch covers Hatamoto and Daimyo Reimagined.\n\nWhich should you play? More roleplaying, ownership and character mechanics: Hatamoto. More troops, weapons, battles and expanded content: Daimyo Reimagined. Fewer bugs: install Hubii's matching patch on whichever version you choose.",
       "support": "full",
       "notes": "Apply the World map patch from the module's Patches window.",
       "languages": [
@@ -446,6 +562,81 @@
         }
       },
       "version": "4.5"
+    },
+    {
+      "id": "1860s Old America 1.5",
+      "name": "1860s Old America",
+      "author": "Gabrilduro",
+      "summary": "The American Civil War and the Wild West.",
+      "description": "1860s Old America takes Warband to North America in the 1860s: the American Civil War, the western frontier, the French intervention in Mexico and the Indian Wars. It is a single-player role-playing and strategy campaign, played in first or third person.\n\nThe map runs from the Civil War battlefields of the east across the West to Mexico. Factions include the armies of the Civil War, France with its own lords, towns and troops in Mexico, Mexican and Comanchero bands, and the Apaches and other Indian nations. Western towns and Indian camps have their own scenes, and showdowns with gunfights take the place of arenas.\n\nIt adds revolvers, rifles, uniforms, outfits and fully equipped horses, new troop trees and faces, companions and merchants, battle formations and orders, and music that follows the faction and the situation.\n\nThe original also offers custom battles and LAN multiplayer, including co-op, with ten playable factions.",
+      "support": "full",
+      "notes": "Apply the battle consequences patch from the module's Patches window. Notices that the multiplayer-only factions were eliminated appear at the start of a new game; this is the module's own behaviour.",
+      "languages": [
+        "en"
+      ],
+      "url": "https://www.moddb.com/mods/1860s-old-america",
+      "localizations": {
+        "ru": {
+          "summary": "Гражданская война в США и Дикий Запад."
+        }
+      },
+      "version": "1.5"
+    },
+    {
+      "id": "Anno Domini 1257",
+      "name": "1257AD - Enhanced Edition",
+      "author": "DrTomas, obamaladen",
+      "summary": "A historically grounded campaign in 13th-century Europe, starting in 1257 AD.",
+      "description": "Anno Domini 1257 recreates 13th-century Europe, starting in 1257 AD and aiming to be as historically accurate as possible. From that point, the player and NPC lords shape the land and fight for supremacy and control of the continent.",
+      "support": "partial",
+      "url": "https://www.moddb.com/mods/1257ad-enhanced-edition",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "id": "A World of Ice and Fire",
+      "name": "A World of Ice and Fire",
+      "author": "produno",
+      "summary": "A single-player Game of Thrones overhaul set across Westeros and Essos.",
+      "description": "A World of Ice and Fire is a single-player Game of Thrones overhaul mod for Mount & Blade: Warband, created by produno and originally released in 2017. Set across Westeros and Essos, it lets players create their own house, navigate political treachery, and fight to claim the Iron Throne.",
+      "support": "partial",
+      "url": "https://www.moddb.com/mods/a-world-of-ice-and-fire",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "id": "The Last Days of the Third Age",
+      "name": "The Last Days of the Third Age",
+      "author": "TLD community",
+      "summary": "A Tolkien-based Warband overhaul with 19 factions and a winnable campaign.",
+      "description": "The Last Days of the Third Age is a long-standing, community-developed Tolkien-based mod for Mount & Blade: Warband. Play as the Free Peoples or Sauron's forces across 19 lore-accurate factions, as Men, Elves, Dwarves, Orcs, or Uruk-hai, each with distinct appearances and gear restrictions. Traditional money is replaced by faction-specific resource points and influence earned through quests, battles, and scrap loot. Factions have dynamic strength and localized standings, and capitals and settlements can be razed to eliminate factions and win the war. The mod features custom armor, weapons, locations, companions, NPCs, and an original orchestral soundtrack.",
+      "support": "partial",
+      "url": "https://github.com/tldmod/tldmod/",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "id": "RaW 2.6 Beta",
+      "name": "Rome at War",
+      "author": "Seek n Destroy, Rome at War development team",
+      "summary": "Total conversion set in 300 B.C., after Alexander the Great.",
+      "description": "Rome at War is a total conversion set in 300 B.C., 23 years after the death of Alexander the Great. It supports single-player and multiplayer, and needs Warband 1.161 or later.",
+      "support": "full",
+      "notes": "Basic support: the single-player campaign runs; multiplayer and the rest of the mod have not been fully tested yet.",
+      "languages": [
+        "en",
+        "ru"
+      ],
+      "url": "https://www.moddb.com/mods/rome-at-war2/downloads/raw-2-6-beta-02022020-update",
+      "localizations": {
+        "ru": {
+          "summary": "Глобальная модификация: 300 год до н. э., после Александра Македонского."
+        }
+      },
+      "version": "2.6 Beta"
     }
   ],
   "servers": [

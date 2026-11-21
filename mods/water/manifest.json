@@ -1,11 +1,12 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "minLauncherVersion": "4.3",
   "id": "mbtool.water",
   "name": "Water Physics & Drowning",
   "author": "remixer-dec",
   "summary": "Slower wading and sinking, softer water landings, and limited breath while the mouth is fully submerged. Single player and hosts only.",
   "category": "Gameplay",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "modAbi": 1,
   "gameBuilds": ["default"],
   "localizations": {
@@ -19,6 +20,7 @@
     }
   },
   "compatibility": { "loadBefore": ["mbtool.vibration"] },
+  "imports": [{ "mod": "builtin.engine-recompile", "symbols": ["mb_engine_recompile_api"] }],
   "hooks": [
     { "id": "water-blows", "mechanism": "SHADOWHOOK_UNIQUE", "behavior": "CHAIN", "target": "libMBExpMobile.so", "offset": "0x97dec" },
     { "id": "water-clear", "mechanism": "SHADOWHOOK_UNIQUE", "behavior": "CHAIN", "target": "libMBExpMobile.so", "offset": "0xdbcb4" },

@@ -1,7 +1,7 @@
 # Fire Damage
 
-A standalone native mod, listed in the online library. **Not bundled in the APK**
-or enabled by a graphics preset.
+A standalone native mod, listed in the online library. This package requires
+M&BTool 4.3 or newer and is distributed separately from the APK.
 
 From the public MNBTool repository root:
 
@@ -22,10 +22,8 @@ received-damage message rounds each hit after difficulty, and smaller hits read 
 Fire Damage loads before Hit Vibration: an earlier function-hook link is the outer one,
 so its hits pass through Vibration's hook.
 
-Fire Damage and Depth Texture Shadows both chain `Mission::tick` (`0xe4d28`).
-Older launchers incorrectly declare the shadow hook as a replacement and reject
-the combination. Use a launcher with its corrected `CHAIN` declaration to enable
-both; updating the Fire Damage package alone cannot correct built-in metadata.
+Fire Damage, Water Physics & Drowning and Depth Texture Shadows all chain
+`Mission::tick` (`0xe4d28`).
 
 Flames on scene props, torches/carried items and scripted particle bursts affect
 people and horses whose bodies touch them. Detection uses the module's particle
@@ -37,6 +35,8 @@ and custom effects with none of these names cannot be identified automatically.
 Checks run every half second of mission simulation. World transforms, emitter
 spread and surviving particles define each flame's bounds, with only the inner
 fifth of a particle's size (its visible core) counted; height matters.
+The mod observes completed particle ticks through Engine Recompile when
+available and uses a CHAIN hook on the stock tick otherwise.
 Overlapping particle layers apply one damage rate. Live emitters remain hazardous
 at low particle detail, and finished effects disappear from detection. No camera
 or rendering hook is involved. Damage passes through the game's normal hit/death
